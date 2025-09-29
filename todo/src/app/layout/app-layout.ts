@@ -17,6 +17,9 @@ import { MatButtonModule } from '@angular/material/button';
         box-sizing: border-box;
         padding: 25px;
       }
+      .mat-sidenav {
+        width: 300px
+      }
     `,
   ],
   imports: [
@@ -41,7 +44,7 @@ import { MatButtonModule } from '@angular/material/button';
         ></app-side-nav>
       </mat-sidenav>
 
-      <mat-sidenav-content [style.margin-left.px]="!isExpanded ? 60 : 350">
+      <mat-sidenav-content [style.margin-left.px]="!isExpanded ? 60 : 300">
         <div class="content-container">
           <router-outlet></router-outlet>
         </div>

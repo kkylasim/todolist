@@ -6,7 +6,7 @@ import { MatListModule } from "@angular/material/list";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatButtonModule } from "@angular/material/button";
 import { RouterModule } from '@angular/router';
-
+import { CommonModule } from '@angular/common';  
 
 @Component({
   selector: 'app-side-nav',
@@ -18,7 +18,8 @@ import { RouterModule } from '@angular/router';
     MatTooltipModule,
     MatListModule,
     MatButtonModule,
-    RouterModule
+    RouterModule,
+    CommonModule
   ]
 })
 export class SideNav {
@@ -26,7 +27,9 @@ export class SideNav {
   @Output() toggleMenu = new EventEmitter();
 
   public routeLinks = [
-    { link: "/", name: "Dashboard", icon: "dashboard" },
+    { link: "/dashboard", name: "Dashboard", icon: "dashboard" },
     { link: "/listView", name: "ListView", icon: "account_balance" },
+    { link: "/calendarView", name: "CalendarView", icon: "account_balance" },
+    { link: "/taskView", name: "TaskView", icon: "account_balance" },
   ];
 }
