@@ -1,1 +1,28 @@
-<p>list-view works!</p>
+<h1>View All Tasks</h1>
+<mat-form-field class="search">
+    <input matInput type="search">
+    <button matSuffix mat-icon-button aria-label="Search">
+      <mat-icon>search</mat-icon>
+    </button>
+</mat-form-field>
+<div class="filters">
+    <div class="sort">
+        <h3>Sort by: </h3>
+        <mat-form-field>
+            <mat-label>Select</mat-label>
+            <mat-select>
+              <mat-option value="one">First option</mat-option>
+              <mat-option value="two">Second option</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div class="tags">
+        <h3>Filter by Tag: </h3>
+        <mat-chip-listbox class="mat-mdc-chip-set-stacked" aria-label="Tag selection" [multiple]="true" [(ngModel)]="selectedTags">
+            @for (tag of tags; track tag) {
+              <mat-chip-option style="width: auto; margin-top: 10px;">{{tag}}</mat-chip-option>
+            }
+          </mat-chip-listbox>
+    </div>
+</div>
+<app-expand-list></app-expand-list>
