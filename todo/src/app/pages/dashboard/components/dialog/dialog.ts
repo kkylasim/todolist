@@ -17,18 +17,18 @@ import { Button } from '../../../../common-components/button/button';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Dialog {
-  tags: string[] = ['Angular', 'Material', 'Dashboard', 'Tasks'];
-  newTag: string = '';
+  rewards: string[] = ['r1', 'r2', 'r3', 'r4'];
+  newReward: string = '';
 
-  removeTag(tag: string) {
-    this.tags = this.tags.filter(t => t !== tag);
+  removeReward(reward: string) {
+    this.rewards = this.rewards.filter(r => r !== reward);
   }
 
-  addTag() {
-    const trimmed = this.newTag.trim();
-    if (trimmed && !this.tags.includes(trimmed)) {
-      this.tags.push(trimmed);
+  addReward() {
+    const trimmed = this.newReward.trim();
+    if (trimmed && !this.rewards.includes(trimmed)) {
+      this.rewards.push(trimmed);
     }
-    this.newTag = '';
+    this.newReward = '';
   }
 }

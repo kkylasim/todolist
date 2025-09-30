@@ -6,7 +6,7 @@ import {MatSelectModule} from '@angular/material/select';
 import { ExpandList } from '../../common-components/expand-list/expand-list';
 import { NgFor, NgIf } from '@angular/common';
 import { MatChipsModule } from '@angular/material/chips';
-import { FormsModule } from '@angular/forms';  
+import { FormsModule } from '@angular/forms'; 
 
 @Component({
   selector: 'app-list-view',
@@ -15,7 +15,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './list-view.scss'
 })
 export class ListView {
-  tags: string[] = ['Angular', 'React', 'Vue', 'Svelte'];
+  tags: string[] = ['tag1', 'tag2', 'tag3', 'tag4'];
   selectedTags: string[] = [];
 
   toggleTag(tag: string) {

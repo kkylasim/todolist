@@ -4,7 +4,7 @@
     <div class="title">
         <h3>Task Title</h3>
         <mat-form-field style="width:40%">
-            <input matInput>
+            <input matInput [(ngModel)]="newTask.title">
         </mat-form-field>
     </div>
     
@@ -12,7 +12,7 @@
         <h3>Description</h3>
         <mat-form-field style="width:80%; height:200px">
             <mat-label>Enter Task Description</mat-label>
-            <textarea matInput></textarea>
+            <textarea matInput [(ngModel)]="newTask.description"></textarea>
         </mat-form-field>
     </div>
     
@@ -20,17 +20,26 @@
         <h3>Due Date</h3>
         <mat-form-field>
             <mat-label>MM/DD/YYYY</mat-label>
-            <input matInput [matDatepicker]="datePicker">
+            <input matInput [matDatepicker]="datePicker" [(ngModel)]="newTask.duedate">
             <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
             <mat-datepicker #datePicker></mat-datepicker>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Pick a time</mat-label>
-            <input matInput [matTimepicker]="timePicker">
+            <input matInput [matTimepicker]="timePicker" [(ngModel)]="newTask.duetime">
             <mat-timepicker-toggle matIconSuffix [for]="timePicker"/>
             <mat-timepicker #timePicker/>
         </mat-form-field>          
     </div>
+</div>
+
+<div class="tags">
+    <h3>Add Tag(s)</h3>
+    <mat-chip-listbox class="mat-mdc-chip-set-stacked" aria-label="Tag selection" [multiple]="true" [(ngModel)]="newTask.tags">
+        @for (tag of tags; track tag) {
+          <mat-chip-option [value]="tag" style="width: auto; margin-top: 10px;">{{tag}}</mat-chip-option>
+        }
+      </mat-chip-listbox>
 </div>
 
 <div>
@@ -40,12 +49,12 @@
     <div class="recurring-frequency" *ngIf="isRecurring">
         <mat-form-field>
             <mat-label>Number</mat-label>
-            <input matInput type="number" class="example-right-align" placeholder="0" />
+            <input matInput type="number" class="example-right-align" placeholder="0" [(ngModel)]="newTask.recurring.frequency"/>
         </mat-form-field>
         <h3>times a</h3>
         <mat-form-field>
             <mat-label>Select</mat-label>
-            <mat-select>
+            <mat-select matInput [(ngModel)]="newTask.recurring.type">
                 <mat-option value="day">Day</mat-option>
                 <mat-option value="week">Week</mat-option>
                 <mat-option value="month">Month</mat-option>
@@ -56,6 +65,6 @@
 
 <div class="buttons">
     <app-button icon="cancel" label="Cancel"></app-button>
-    <app-button label="Create"></app-button>
+    <app-button label="Create" (click)="addTask()"></app-button>
 </div>
 

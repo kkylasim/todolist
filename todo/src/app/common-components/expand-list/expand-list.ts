@@ -5,13 +5,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CommonModule } from '@angular/common';
-
-interface PanelConfig {
-  title: string;
-  description: string;
-  details: string;
-  showCheckbox?: boolean;
-}
+import { TaskService } from '../../services/task.service';
+import { Task } from '../../models/task.model';
+import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-expand-list',
@@ -20,7 +16,8 @@ interface PanelConfig {
     MatIconModule,
     MatButtonModule,
     MatTooltipModule,
-    CommonModule
+    CommonModule,
+    MatChipsModule
   ],
   templateUrl: './expand-list.html',
   styleUrl: './expand-list.scss',
@@ -28,26 +25,21 @@ interface PanelConfig {
 })
 export class ExpandList {
   readonly panelOpenState = signal(false);
-  panels: PanelConfig[] = [
-    {
-      title: 'Task 1',
-      description: '11.50pm',
-      details: 'This is the description of Task 1.',
-      showCheckbox: true,
-    },
-    {
-      title: 'Task 2',
-      description: '5.00pm',
-      details: 'This is the description of Task 2.',
-      showCheckbox: true,
-    },
-  ];
+  panels: Task[] = [];
 
-  onEdit(panel: PanelConfig) {
+  constructor(private taskService: TaskService) {}
+
+  ngOnInit() {
+    this.taskService.tasks$.subscribe(tasks => {
+      this.panels = tasks;
+    });
+  }
+
+  onEdit(panel: Task) {
     console.log('Editing:', panel);
   }
 
-  onDelete(panel: PanelConfig) {
+  onDelete(panel: Task) {
     console.log('Deleting:', panel);
   }
 }
