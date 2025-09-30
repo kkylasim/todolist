@@ -20,10 +20,16 @@
         <h3>Due Date</h3>
         <mat-form-field>
             <mat-label>MM/DD/YYYY</mat-label>
-            <input matInput [matDatepicker]="picker">
-            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
+            <input matInput [matDatepicker]="datePicker">
+            <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
+            <mat-datepicker #datePicker></mat-datepicker>
         </mat-form-field>
+        <mat-form-field>
+            <mat-label>Pick a time</mat-label>
+            <input matInput [matTimepicker]="timePicker">
+            <mat-timepicker-toggle matIconSuffix [for]="timePicker"/>
+            <mat-timepicker #timePicker/>
+        </mat-form-field>          
     </div>
 </div>
 

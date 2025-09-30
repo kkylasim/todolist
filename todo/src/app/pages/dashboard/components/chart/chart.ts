@@ -18,7 +18,7 @@ export class Chart implements AfterViewInit {
       beforeDraw: (chart) => {
         const ctx = chart.ctx;
         ctx.save();
-        ctx.fillStyle = '#e0e0e0';
+        ctx.fillStyle = '#FFF0FD';
         ctx.fillRect(0, 0, chart.width!, chart.height!);
         ctx.restore();
       }
@@ -29,13 +29,14 @@ export class Chart implements AfterViewInit {
       data: {
         labels: ['Progress'],
         datasets: [{
-          backgroundColor: '#249DD6',
+          backgroundColor: '#E19DE3',
           barPercentage: 0.9,
           categoryPercentage: 1,
-          data: [25]
+          data: [7]
         }]
       },
       options: {
+        responsive: true,      
         indexAxis: 'y',
         plugins: {
           legend: { display: false }
@@ -43,15 +44,16 @@ export class Chart implements AfterViewInit {
         maintainAspectRatio: false,
         scales: {
           x: {
-            display: false,
+            display: true,
             min: 0,
-            max: 100
+            max: 10
           },
           y: {
             display: false
           }
         }
-      }, plugins: [greyBackgroundPlugin]
+      }, 
+      plugins: [greyBackgroundPlugin]
     });
   }
 }

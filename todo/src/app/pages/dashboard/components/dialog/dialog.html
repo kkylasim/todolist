@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>Your Rewards</h2>
+<mat-dialog-content class="mat-typography">
+    <mat-chip-set>
+        <mat-chip *ngFor="let tag of tags" [removable]="true" (removed)="removeTag(tag)">
+            {{ tag }}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+        </mat-chip>
+      </mat-chip-set>
+    <h3>Create a new Reward</h3>
+    <mat-form-field>
+        <mat-label>Reward Name</mat-label>
+        <input matInput [(ngModel)]="newTag" (keyup.enter)="addTag()">
+    </mat-form-field>
+    <app-button icon="add" label="Add Reward" (click)="addTag()"></app-button>
+    
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close>Cancel</button>
+  <button matButton [mat-dialog-close]="true" cdkFocusInitial>Save</button>
+</mat-dialog-actions>

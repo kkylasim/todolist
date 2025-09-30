@@ -39,7 +39,7 @@ export class ExpandList {
       title: 'Task 2',
       description: '5.00pm',
       details: 'This is the description of Task 2.',
-      showCheckbox: false,
+      showCheckbox: true,
     },
   ];
 
