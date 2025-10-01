@@ -1,5 +1,5 @@
 <mat-accordion>
-  <mat-expansion-panel *ngFor="let panel of panels" hideToggle>
+  <mat-expansion-panel *ngFor="let panel of panels$ | async ; let i = index" hideToggle>
     <mat-expansion-panel-header>
       <div class="header-content">
         <mat-checkbox *ngIf="panel.showCheckbox" class="checkbox"></mat-checkbox>
@@ -20,7 +20,7 @@
         </mat-panel-description>
 
         <span class="actions">
-          <button mat-icon-button (click)="onEdit(panel)" matTooltip="Edit">
+          <button mat-icon-button (click)="editTask(i)" matTooltip="Edit">
             <mat-icon>edit</mat-icon>
           </button>
           <button mat-icon-button color="warn" (click)="onDelete(panel)" matTooltip="Delete">

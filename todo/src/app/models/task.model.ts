@@ -1,9 +1,11 @@
 export interface Task {
+    id: number;
+    status: 'Todo' | 'Progress' | 'Complete',
     title: string;
     description: string;
     duedate: string;
     duetime: string;
-    recurring?: Recurring | null;
+    recurring: Recurring | null;
     showCheckbox: boolean;
     tags: string[]
   }

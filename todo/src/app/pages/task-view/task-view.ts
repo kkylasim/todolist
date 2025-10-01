@@ -12,7 +12,8 @@ import { NgIf, NgFor } from '@angular/common';
 import { TaskService } from '../../services/task.service';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Task } from '../../models/task.model';
 
 @Component({
   selector: 'app-task-view',
@@ -40,14 +41,32 @@ export class TaskView {
     }
   }
 
-  newTask = { title: '', description: '', duedate: '', duetime: '', recurring: {frequency: 0, type: ''}, tags: [], showCheckbox: true };
+  newTask: Partial<Task> = { title: '', description: '', duedate: '', duetime: '', recurring: {frequency: 0, type: ''}, tags: [] as string[], showCheckbox: true };
+
+  taskId?: number;
 
   constructor(private taskService: TaskService, 
-    private router: Router) {}
+    private router: Router, private route: ActivatedRoute) {}
+
+  ngOnInit() {
+    this.taskId = Number(this.route.snapshot.paramMap.get('id'));
+
+    if (this.taskId !== null && this.taskId !== undefined) {
+      const task = this.taskService.getTaskById(this.taskId);
+      if (task) {
+        this.newTask = { ...task }; 
+      }
+    }
+  }
 
   addTask() {
     if (!this.newTask.title) return;
-    this.taskService.addTask({ ...this.newTask });
+    // this.taskService.addTask({ ...this.newTask });
+    if (this.taskId !== undefined) {
+      this.taskService.updateTask(this.taskId, this.newTask);
+    } else {
+      this.taskService.addTask(this.newTask);
+    }
     this.newTask = { title: '', description: '', tags: [], duedate: '', recurring: {frequency: 0, type: ''}, duetime: '', showCheckbox: true };
     this.router.navigate(['/listView']);
   }

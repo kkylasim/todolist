@@ -1,9 +1,8 @@
 <h1>View All Tasks</h1>
 <mat-form-field class="search">
-    <input matInput type="search">
-    <button matSuffix mat-icon-button aria-label="Search">
-      <mat-icon>search</mat-icon>
-    </button>
+    <mat-icon matPrefix>search</mat-icon>
+    <input matInput type="search" [(ngModel)]="searchTerm" (input)="onSearch()"/>
+    <mat-icon *ngIf="searchTerm" matSuffix (click)="clearSearch()">close</mat-icon>
 </mat-form-field>
 <div class="filters">
     <div class="sort">
@@ -12,7 +11,6 @@
             <mat-label>Select</mat-label>
             <mat-select>
               <mat-option value="one">Due Date</mat-option>
-              <!-- <mat-option value="two">Second option</mat-option> -->
             </mat-select>
         </mat-form-field>
     </div>

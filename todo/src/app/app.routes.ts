@@ -12,6 +12,7 @@ export const routes: Routes = [
     { path: 'listView', component: ListView },
     { path: 'calendarView', component: CalendarView },
     { path: 'taskView', component: TaskView },
+    { path: 'taskView/:id', component: TaskView },
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     { path: '**', redirectTo: 'dashboard' }
   ];

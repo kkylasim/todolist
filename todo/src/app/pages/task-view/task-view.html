@@ -54,7 +54,7 @@
         <h3>times a</h3>
         <mat-form-field>
             <mat-label>Select</mat-label>
-            <mat-select matInput [(ngModel)]="newTask.recurring.type">
+            <mat-select [(ngModel)]="newTask.recurring.type" name="recurringType">
                 <mat-option value="day">Day</mat-option>
                 <mat-option value="week">Week</mat-option>
                 <mat-option value="month">Month</mat-option>

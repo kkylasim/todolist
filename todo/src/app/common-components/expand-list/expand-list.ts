@@ -8,6 +8,8 @@ import { CommonModule } from '@angular/common';
 import { TaskService } from '../../services/task.service';
 import { Task } from '../../models/task.model';
 import { MatChipsModule } from '@angular/material/chips';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-expand-list',
@@ -25,18 +27,14 @@ import { MatChipsModule } from '@angular/material/chips';
 })
 export class ExpandList {
   readonly panelOpenState = signal(false);
-  panels: Task[] = [];
+  panels$: Observable<Task[]>;
 
-  constructor(private taskService: TaskService) {}
-
-  ngOnInit() {
-    this.taskService.tasks$.subscribe(tasks => {
-      this.panels = tasks;
-    });
+  constructor(private taskService: TaskService, private router: Router) {
+    this.panels$ = this.taskService.filteredtasks$;
   }
 
-  onEdit(panel: Task) {
-    console.log('Editing:', panel);
+  editTask(index: number) {
+    this.router.navigate(['/taskView', index]);
   }
 
   onDelete(panel: Task) {
