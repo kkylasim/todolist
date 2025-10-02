@@ -4,7 +4,8 @@ import { Task } from '../models/task.model';
 
 @Injectable({ providedIn: 'root' })
 export class TaskService {
-  private tasksSource = new BehaviorSubject<any[]>([
+  // Use a single source of truth for tasks
+  private initialTasks: any[] = [
     {
       id: 1,
       status: 'Todo',
@@ -13,7 +14,6 @@ export class TaskService {
       duedate: '2025-10-05',
       duetime: '10:00',
       recurring: null,
-      showCheckbox: true,
       tags: ['Angular', 'Writing']
     },
     {
@@ -24,7 +24,6 @@ export class TaskService {
       duedate: '2025-10-02',
       duetime: '14:00',
       recurring: { frequency: 1, type: 'Weekly' },
-      showCheckbox: true,
       tags: ['Meeting', 'Team']
     },
     {
@@ -35,7 +34,6 @@ export class TaskService {
       duedate: '2025-09-30',
       duetime: '16:30',
       recurring: null,
-      showCheckbox: true,
       tags: ['Code', 'Review']
     },
     {
@@ -46,7 +44,6 @@ export class TaskService {
       duedate: '2025-10-07',
       duetime: '11:00',
       recurring: { frequency: 2, type: 'Monthly' },
-      showCheckbox: true,
       tags: ['Blog', 'Angular']
     },
     {
@@ -57,7 +54,6 @@ export class TaskService {
       duedate: '2025-10-03',
       duetime: '09:00',
       recurring: null,
-      showCheckbox: true,
       tags: ['Design', 'UI']
     },
     {
@@ -68,7 +64,6 @@ export class TaskService {
       duedate: '2025-10-04',
       duetime: '13:00',
       recurring: null,
-      showCheckbox: true,
       tags: ['Presentation', 'Client']
     },
     {
@@ -79,13 +74,25 @@ export class TaskService {
       duedate: '2025-09-29',
       duetime: '17:00',
       recurring: { frequency: 1, type: 'Weekly' },
-      showCheckbox: true,
       tags: ['Deployment', 'Release']
     }
-  ]);
+  ];
+
+  private tasks: any[] = [...this.initialTasks]; // main array for all operations
+  public tasksSource = new BehaviorSubject<any[]>([...this.initialTasks]);
   tasks$ = this.tasksSource.asObservable();
 
-  private tasks: any[] = [];
+  todo$ = this.tasks$.pipe(
+    map(tasks => tasks.filter(t => t.status === 'Todo'))
+  );
+
+  inProgress$ = this.tasks$.pipe(
+    map(tasks => tasks.filter(t => t.status === 'Progress'))
+  );
+
+  completed$ = this.tasks$.pipe(
+    map(tasks => tasks.filter(t => t.status === 'Complete'))
+  );
 
   //search function
   private searchTermSubject = new BehaviorSubject<string>('');
@@ -99,6 +106,8 @@ export class TaskService {
   )
 
   setSearchTerm(term: string) {
+    console.log(this.completed$)
+    console.log(term);
     this.searchTermSubject.next(term);
   }
 
@@ -106,12 +115,10 @@ export class TaskService {
   addTask(task: Partial<Task>) {
     const newTask: Partial<Task> = {
       ...task,
-      showCheckbox: true,      
       recurring: task.recurring ?? null, 
     };
-
-    this.tasks.push(newTask);
-    this.tasksSource.next(this.tasks);
+    this.tasks.push(newTask); // add to main array
+    this.tasksSource.next([...this.tasks]); // update observable
     console.log('Task added:', newTask);
   }
 
@@ -121,14 +128,16 @@ export class TaskService {
 
   //update task
   updateTask(id: number, updatedTask: Partial<Task>) {
-    this.tasks[id] = { ...updatedTask };
-    this.tasksSource.next([...this.tasks]);
+    const idx = this.tasks.findIndex(t => t.id === id);
+    if (idx !== -1) {
+      this.tasks[idx] = { ...updatedTask };
+      this.tasksSource.next([...this.tasks]);
+    }
   }
 
   //delete function
   deleteTask(id: number) {
-    this.tasksSource.next(
-      this.tasksSource.value.filter( t => t.id !== id )
-    );
+    this.tasks = this.tasks.filter( t => t.id !== id );
+    this.tasksSource.next([...this.tasks]);
   }
 }

@@ -41,33 +41,28 @@ export class TaskView {
     }
   }
 
-  newTask: Partial<Task> = { title: '', description: '', duedate: '', duetime: '', recurring: {frequency: 0, type: ''}, tags: [] as string[], showCheckbox: true };
-
-  taskId?: number;
+  newTask: Task = { id: Date.now(), title: '', status: 'Todo', description: '', duedate: '', duetime: '', recurring: {frequency: 0, type: ''}, tags: [] as string[] };
 
   constructor(private taskService: TaskService, 
     private router: Router, private route: ActivatedRoute) {}
 
-  ngOnInit() {
-    this.taskId = Number(this.route.snapshot.paramMap.get('id'));
-
-    if (this.taskId !== null && this.taskId !== undefined) {
-      const task = this.taskService.getTaskById(this.taskId);
-      if (task) {
-        this.newTask = { ...task }; 
-      }
-    }
-  }
-
   addTask() {
+    // Prevent adding a task without a title
     if (!this.newTask.title) return;
-    // this.taskService.addTask({ ...this.newTask });
-    if (this.taskId !== undefined) {
-      this.taskService.updateTask(this.taskId, this.newTask);
-    } else {
-      this.taskService.addTask(this.newTask);
-    }
-    this.newTask = { title: '', description: '', tags: [], duedate: '', recurring: {frequency: 0, type: ''}, duetime: '', showCheckbox: true };
+
+    // Always create a new unique ID for the new task
+    const createdTask: Task = {
+      ...this.newTask,
+      id: Date.now(), // Use current timestamp for unique ID
+    };
+
+    // Add the new task using the service
+    this.taskService.addTask(createdTask);
+
+    // Optionally reset the form fields after creation
+    this.newTask = { id: Date.now(), title: '', status: 'Todo', description: '', duedate: '', duetime: '', recurring: {frequency: 0, type: ''}, tags: [] };
+
+    // Navigate to the list view after creating the task
     this.router.navigate(['/listView']);
   }
 }

@@ -14,15 +14,36 @@
       <div class="grid-container">
         <div class="item">
           <h3>To Do</h3>
-          <app-expand-list></app-expand-list>
+          <app-expand-list 
+          [panels]="todo" 
+          cdkDropList
+          #todoList="cdkDropList"
+          [cdkDropListData]="todo"
+          [cdkDropListConnectedTo]="[inProgressList, doneList]"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)"></app-expand-list>
         </div>
         <div class="item">
           <h3>In Progress</h3>
-          <app-expand-list></app-expand-list>
+          <app-expand-list [panels]="inProgress"
+          cdkDropList
+          #inProgressList="cdkDropList"
+          [cdkDropListData]="inProgress"
+          [cdkDropListConnectedTo]="[todoList, doneList]"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)"
+          ></app-expand-list>
         </div>
         <div class="item">
           <h3>Completed</h3>
-          <app-expand-list></app-expand-list>
+          <app-expand-list [panels]="completed"
+          cdkDropList
+          #doneList="cdkDropList"
+          [cdkDropListData]="completed"
+          [cdkDropListConnectedTo]="[todoList, inProgressList]"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)"
+          ></app-expand-list>
         </div>
       </div>
     </mat-card-content>

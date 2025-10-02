@@ -6,7 +6,6 @@ export interface Task {
     duedate: string;
     duetime: string;
     recurring: Recurring | null;
-    showCheckbox: boolean;
     tags: string[]
   }
 

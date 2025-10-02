@@ -1,8 +1,7 @@
 <mat-accordion>
-  <mat-expansion-panel *ngFor="let panel of panels$ | async ; let i = index" hideToggle>
+  <mat-expansion-panel *ngFor="let panel of panels; let i = index; track panel" hideToggle cdkDrag>
     <mat-expansion-panel-header>
       <div class="header-content">
-        <mat-checkbox *ngIf="panel.showCheckbox" class="checkbox"></mat-checkbox>
 
         <mat-panel-title>
           {{ panel.title }}
@@ -10,7 +9,7 @@
 
         <mat-panel-description>
           <p style="margin-right: 15px;">
-            Due: {{ panel.duedate | date:'shortDate' }}, {{ panel.duetime | date:'shortTime' }}
+            Due: {{ getDueDateTime(panel) | date:'short' }}
           </p>
           <mat-chip-set>
             <mat-chip *ngFor="let tag of panel.tags" [removable]="false">
@@ -20,7 +19,7 @@
         </mat-panel-description>
 
         <span class="actions">
-          <button mat-icon-button (click)="editTask(i)" matTooltip="Edit">
+          <button mat-icon-button (click)="editTask(panel)" matTooltip="Edit">
             <mat-icon>edit</mat-icon>
           </button>
           <button mat-icon-button color="warn" (click)="onDelete(panel)" matTooltip="Delete">

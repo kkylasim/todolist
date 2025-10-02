@@ -18,7 +18,13 @@ import { TaskService } from '../../services/task.service';
 export class ListView {
   searchTerm: string = '';
 
-  constructor(private taskService: TaskService) {}
+  tasks: any[] = [];
+
+  constructor(private taskService: TaskService) {
+    this.taskService.tasks$.subscribe(tasks => {
+      this.tasks = tasks;
+    });
+  }
 
   onSearch() {
     this.taskService.setSearchTerm(this.searchTerm);
