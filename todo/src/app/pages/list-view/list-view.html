@@ -7,11 +7,9 @@
 <div class="filters">
     <div class="tags">
         <h3>Filter by Tag: </h3>
-        <mat-chip-listbox class="mat-mdc-chip-set-stacked" aria-label="Tag selection" [multiple]="true" [(ngModel)]="selectedTags">
-            @for (tag of tags; track tag) {
-              <mat-chip-option style="width: auto; margin-top: 10px;">{{tag.name}}</mat-chip-option>
-            }
-          </mat-chip-listbox>
+        <mat-chip-listbox class="mat-mdc-chip-set-stacked" aria-label="Tag selection" [multiple]="true" [(ngModel)]="selectedTags" (ngModelChange)="onTagSelectionChange()">
+            <mat-chip-option *ngFor="let tag of tags" [value]="tag.id" style="width: auto; margin-top: 10px;">{{tag.name}}</mat-chip-option>
+        </mat-chip-listbox>
     </div>
     <div class="sort">
         <h3>Sort by: </h3>

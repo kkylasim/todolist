@@ -21,11 +21,18 @@ export class ListView {
 
   tasks: any[] = [];
   tags: any[] = [];
-  selectedTags: string[] = [];
+  selectedTags: number[] = [];
+
+  filterTasksByTags(tasks: any[]): any[] {
+    if (this.selectedTags.length === 0) return tasks;
+    return tasks.filter(task =>
+      task.tags && task.tags.some((tagId: number) => this.selectedTags.includes(tagId))
+    );
+  }
 
   constructor(private taskService: TaskService, private tagService: TagService) {
     this.taskService.filteredtasks$.subscribe(tasks => {
-      this.tasks = tasks;
+      this.tasks = this.filterTasksByTags(tasks);
     });
     this.tagService.tags$.subscribe(tags => {
       this.tags = tags;
@@ -41,12 +48,20 @@ export class ListView {
     this.taskService.setSearchTerm('');
   }
 
-  toggleTag(tag: string) {
-    const index = this.selectedTags.indexOf(tag);
+  onTagSelectionChange() {
+    this.taskService.filteredtasks$.subscribe(tasks => {
+      this.tasks = this.filterTasksByTags(tasks);
+      console.log(this.tasks);
+    });
+  }
+
+  toggleTag(tagId: number) {
+    const index = this.selectedTags.indexOf(tagId);
     if (index === -1) {
-      this.selectedTags.push(tag);
+      this.selectedTags.push(tagId);
     } else {
       this.selectedTags.splice(index, 1);
     }
+    this.onTagSelectionChange();
   }
 }
