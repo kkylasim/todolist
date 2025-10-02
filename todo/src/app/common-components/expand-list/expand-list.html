@@ -1,22 +1,11 @@
 <mat-accordion>
-  <mat-expansion-panel *ngFor="let panel of panels; let i = index; track panel" hideToggle cdkDrag>
+  <mat-expansion-panel *ngFor="let panel of panels; let i = index; track panel" class="responsive-panel" hideToggle cdkDrag>
     <mat-expansion-panel-header>
       <div class="header-content">
 
         <mat-panel-title>
           {{ panel.title }}
         </mat-panel-title>
-
-        <mat-panel-description>
-          <p style="margin-right: 15px;">
-            Due: {{ getDueDateTime(panel) | date:'short' }}
-          </p>
-          <mat-chip-set>
-            <mat-chip *ngFor="let tag of panel.tags" [removable]="false">
-                {{ tag }}
-            </mat-chip>
-          </mat-chip-set>
-        </mat-panel-description>
 
         <span class="actions">
           <button mat-icon-button (click)="editTask(panel)" matTooltip="Edit">
@@ -29,7 +18,15 @@
       </div>
     </mat-expansion-panel-header>
 
-    <p>Description: {{ panel.description }}<br>
+    <br>
+    <mat-chip-set>
+      <mat-chip *ngFor="let tag of panel.tags" [removable]="false">
+          {{ tag }}
+      </mat-chip>
+    </mat-chip-set>
+
+    <p style="font-size: small;">Due: {{ getDueDateTime(panel) | date:'short' }} <br>
+      Description: {{ panel.description }}<br>
       Recurring: {{ panel.recurring? panel.recurring.frequency + ' times a ' + panel.recurring.type : 'None' }}</p>
   </mat-expansion-panel>
 </mat-accordion>

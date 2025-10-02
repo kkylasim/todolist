@@ -21,7 +21,7 @@ export class ListView {
   tasks: any[] = [];
 
   constructor(private taskService: TaskService) {
-    this.taskService.tasks$.subscribe(tasks => {
+    this.taskService.filteredtasks$.subscribe(tasks => {
       this.tasks = tasks;
     });
   }
