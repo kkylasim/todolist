@@ -7,6 +7,14 @@
           {{ panel.title }}
         </mat-panel-title>
 
+        <mat-panel-description *ngIf="showTagsInHeader">
+          <mat-chip-set>
+            <mat-chip *ngFor="let tag of panel.tags" [removable]="false">
+                {{ tag }}
+            </mat-chip>
+          </mat-chip-set>
+        </mat-panel-description>
+
         <span class="actions">
           <button mat-icon-button (click)="editTask(panel)" matTooltip="Edit">
             <mat-icon>edit</mat-icon>
@@ -18,8 +26,7 @@
       </div>
     </mat-expansion-panel-header>
 
-    <br>
-    <mat-chip-set>
+    <mat-chip-set *ngIf="!showTagsInHeader">
       <mat-chip *ngFor="let tag of panel.tags" [removable]="false">
           {{ tag }}
       </mat-chip>

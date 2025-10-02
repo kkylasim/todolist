@@ -37,6 +37,7 @@ export class ExpandList {
   readonly panelOpenState = signal(false);
 
   @Input() panels: any[] | null | undefined = [];
+  @Input() showTagsInHeader: boolean = false;
 
   constructor(private taskService: TaskService, private router: Router) {}
 
