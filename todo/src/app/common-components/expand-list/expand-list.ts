@@ -10,6 +10,8 @@ import { Task } from '../../models/task.model';
 import { MatChipsModule } from '@angular/material/chips';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs'; 
+import { TagService } from '../../services/tag.service';
+import { Tag } from '../../models/tag.model';
 import {
   CdkDragDrop,
   moveItemInArray,
@@ -35,11 +37,16 @@ import {
 })
 export class ExpandList {
   readonly panelOpenState = signal(false);
+  tags: Tag[] = [];
 
   @Input() panels: any[] | null | undefined = [];
   @Input() showTagsInHeader: boolean = false;
 
-  constructor(private taskService: TaskService, private router: Router) {}
+  constructor(private taskService: TaskService, private tagService: TagService, private router: Router) {
+    this.tagService.tags$.subscribe(tags => {
+      this.tags = tags;
+    });
+  }
 
   drop(event: CdkDragDrop<string[]>) {
     if (event.previousContainer === event.container) {
@@ -86,6 +93,11 @@ export class ExpandList {
     const dateTimeString = `${dateStr}T${timeStr}:00`;
     const dateObj = new Date(dateTimeString);
     return isNaN(dateObj.getTime()) ? null : dateObj;
+  }
+
+  getPanelTags(panel: any): Tag[] {
+    if (!panel.tags || !this.tags) return [];
+    return panel.tags.map((id: number) => this.tags.find(tag => tag.id === id)).filter(Boolean) as Tag[];
   }
 
   editTask(panel: any) {

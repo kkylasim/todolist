@@ -37,7 +37,7 @@
     <h3>Add Tag(s)</h3>
     <mat-chip-listbox class="mat-mdc-chip-set-stacked" aria-label="Tag selection" [multiple]="true" [(ngModel)]="task.tags">
         @for (tag of tags; track tag) {
-          <mat-chip-option [value]="tag" style="width: auto; margin-top: 10px;">{{tag}}</mat-chip-option>
+          <mat-chip-option [value]="tag" style="width: auto; margin-top: 10px;">{{tag.name}}</mat-chip-option>
         }
       </mat-chip-listbox>
 </div>
@@ -46,7 +46,7 @@
     <mat-checkbox class="example-margin" [(ngModel)]="isRecurring">
         <h3>Make Recurring</h3>
     </mat-checkbox>
-    <div class="recurring-frequency" *ngIf="isRecurring">
+    <div class="recurring-frequency" *ngIf="isRecurring && task.recurring">
         <mat-form-field>
             <mat-label>Number</mat-label>
             <input matInput type="number" class="example-right-align" placeholder="0" [(ngModel)]="task.recurring.frequency"/>

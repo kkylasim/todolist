@@ -14,6 +14,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Task } from '../../models/task.model';
+import { TagService } from '../../services/tag.service';
 
 @Component({
   selector: 'app-task-view',
@@ -28,23 +29,38 @@ import { Task } from '../../models/task.model';
 export class TaskView {
   isRecurring = false;
 
-  tags: string[] = ['tag1', 'tag2', 'tag3', 'tag4'];
+  tags: any[] = [];
 
-  selectedTags: string[] = [];
+  selectedTags: number[] = [];
 
-  toggleTag(tag: string) {
-    const index = this.selectedTags.indexOf(tag);
+  newTask: Task = { id: Date.now(), title: '', status: 'Todo', description: '', duedate: '', duetime: '', recurring: null, tags: [] as number[] };
+
+  toggleTag(tagId: number) {
+    const index = this.selectedTags.indexOf(tagId);
     if (index === -1) {
-      this.selectedTags.push(tag);
+      this.selectedTags.push(tagId);
     } else {
       this.selectedTags.splice(index, 1);
     }
   }
 
-  newTask: Task = { id: Date.now(), title: '', status: 'Todo', description: '', duedate: '', duetime: '', recurring: {frequency: 0, type: ''}, tags: [] as string[] };
+  setRecurring(value: boolean) {
+    this.isRecurring = value;
+    if (value) {
+      if (!this.newTask.recurring) {
+        this.newTask.recurring = { frequency: 1, type: 'day' };
+      }
+    } else {
+      this.newTask.recurring = null;
+    }
+  }
 
-  constructor(private taskService: TaskService, 
-    private router: Router, private route: ActivatedRoute) {}
+  constructor(private taskService: TaskService,
+    private router: Router, private route: ActivatedRoute, private tagService: TagService) {
+      this.tagService.tags$.subscribe(tags => {
+        this.tags = tags;
+      });
+    }
 
   addTask() {
     // Prevent adding a task without a title
@@ -54,13 +70,15 @@ export class TaskView {
     const createdTask: Task = {
       ...this.newTask,
       id: Date.now(), // Use current timestamp for unique ID
+      tags: [...this.selectedTags], // Save selected tag ids
     };
 
     // Add the new task using the service
     this.taskService.addTask(createdTask);
 
     // Optionally reset the form fields after creation
-    this.newTask = { id: Date.now(), title: '', status: 'Todo', description: '', duedate: '', duetime: '', recurring: {frequency: 0, type: ''}, tags: [] };
+    this.newTask = { id: Date.now(), title: '', status: 'Todo', description: '', duedate: '', duetime: '', recurring: null, tags: [] };
+    this.selectedTags = [];
 
     // Navigate to the list view after creating the task
     this.router.navigate(['/listView']);

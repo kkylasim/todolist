@@ -4,7 +4,23 @@ import { Task } from '../models/task.model';
 
 @Injectable({ providedIn: 'root' })
 export class TaskService {
-  // Use a single source of truth for tasks
+  // Centralized tag list (should be moved to TagService)
+  public initialTags = [
+    { id: 1, name: 'Angular', color: '#DD0031' },
+    { id: 2, name: 'Writing', color: '#FFD700' },
+    { id: 3, name: 'Meeting', color: '#2196F3' },
+    { id: 4, name: 'Team', color: '#4CAF50' },
+    { id: 5, name: 'Code', color: '#9C27B0' },
+    { id: 6, name: 'Review', color: '#FF5722' },
+    { id: 7, name: 'Blog', color: '#FF9800' },
+    { id: 8, name: 'Design', color: '#E91E63' },
+    { id: 9, name: 'UI', color: '#00BCD4' },
+    { id: 10, name: 'Presentation', color: '#8BC34A' },
+    { id: 11, name: 'Client', color: '#795548' },
+    { id: 12, name: 'Deployment', color: '#607D8B' },
+    { id: 13, name: 'Release', color: '#F44336' }
+  ];
+
   private initialTasks: any[] = [
     {
       id: 1,
@@ -14,7 +30,7 @@ export class TaskService {
       duedate: '2025-10-05',
       duetime: '10:00',
       recurring: null,
-      tags: ['Angular', 'Writing']
+      tags: [1, 2] // Angular, Writing
     },
     {
       id: 2,
@@ -24,7 +40,7 @@ export class TaskService {
       duedate: '2025-10-02',
       duetime: '14:00',
       recurring: { frequency: 1, type: 'Weekly' },
-      tags: ['Meeting', 'Team']
+      tags: [3, 4] // Meeting, Team
     },
     {
       id: 3,
@@ -34,7 +50,7 @@ export class TaskService {
       duedate: '2025-09-30',
       duetime: '16:30',
       recurring: null,
-      tags: ['Code', 'Review']
+      tags: [5, 6] // Code, Review
     },
     {
       id: 4,
@@ -44,7 +60,7 @@ export class TaskService {
       duedate: '2025-10-07',
       duetime: '11:00',
       recurring: { frequency: 2, type: 'Monthly' },
-      tags: ['Blog', 'Angular']
+      tags: [7, 1] // Blog, Angular
     },
     {
       id: 5,
@@ -54,7 +70,7 @@ export class TaskService {
       duedate: '2025-10-03',
       duetime: '09:00',
       recurring: null,
-      tags: ['Design', 'UI']
+      tags: [8, 9] // Design, UI
     },
     {
       id: 6,
@@ -64,7 +80,7 @@ export class TaskService {
       duedate: '2025-10-04',
       duetime: '13:00',
       recurring: null,
-      tags: ['Presentation', 'Client']
+      tags: [10, 11] // Presentation, Client
     },
     {
       id: 7,
@@ -74,7 +90,7 @@ export class TaskService {
       duedate: '2025-09-29',
       duetime: '17:00',
       recurring: { frequency: 1, type: 'Weekly' },
-      tags: ['Deployment', 'Release']
+      tags: [12, 13] // Deployment, Release
     }
   ];
 

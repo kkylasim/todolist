@@ -14,6 +14,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Task } from '../../models/task.model';
+import { TagService } from '../../services/tag.service';
+import { Tag } from '../../models/tag.model';
 
 @Component({
   selector: 'app-edit-task-view',
@@ -26,11 +28,12 @@ import { Task } from '../../models/task.model';
 })
 export class EditTaskView implements OnInit {
   task: Partial<Task> = {};
-  tags: string[] = [];
+  tags: Tag[] = [];
   isRecurring = false;
 
   constructor(
     private taskService: TaskService,
+    private tagService: TagService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -41,10 +44,11 @@ export class EditTaskView implements OnInit {
     if (foundTask) {
       this.task = { ...foundTask };
       this.isRecurring = !!this.task.recurring;
-      this.tags = this.taskService.tasksSource.value
-        .flatMap(t => t.tags)
-        .filter((tag, i, arr) => arr.indexOf(tag) === i);
     }
+    // Subscribe to centralized tags
+    this.tagService.tags$.subscribe(tags => {
+      this.tags = tags;
+    });
   }
 
   saveTask() {

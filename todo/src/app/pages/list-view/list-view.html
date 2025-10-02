@@ -5,6 +5,14 @@
     <mat-icon *ngIf="searchTerm" matSuffix (click)="clearSearch()">close</mat-icon>
 </mat-form-field>
 <div class="filters">
+    <div class="tags">
+        <h3>Filter by Tag: </h3>
+        <mat-chip-listbox class="mat-mdc-chip-set-stacked" aria-label="Tag selection" [multiple]="true" [(ngModel)]="selectedTags">
+            @for (tag of tags; track tag) {
+              <mat-chip-option style="width: auto; margin-top: 10px;">{{tag.name}}</mat-chip-option>
+            }
+          </mat-chip-listbox>
+    </div>
     <div class="sort">
         <h3>Sort by: </h3>
         <mat-form-field>
@@ -13,14 +21,6 @@
               <mat-option value="one">Due Date</mat-option>
             </mat-select>
         </mat-form-field>
-    </div>
-    <div class="tags">
-        <h3>Filter by Tag: </h3>
-        <mat-chip-listbox class="mat-mdc-chip-set-stacked" aria-label="Tag selection" [multiple]="true" [(ngModel)]="selectedTags">
-            @for (tag of tags; track tag) {
-              <mat-chip-option style="width: auto; margin-top: 10px;">{{tag}}</mat-chip-option>
-            }
-          </mat-chip-listbox>
     </div>
 </div>
 <app-expand-list [panels]="tasks" [showTagsInHeader]="true"></app-expand-list>

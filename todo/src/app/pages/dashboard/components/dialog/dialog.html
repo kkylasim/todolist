@@ -2,7 +2,7 @@
 <mat-dialog-content class="mat-typography">
     <mat-chip-set>
         <mat-chip *ngFor="let reward of rewards" [removable]="true" (removed)="removeReward(reward)">
-            {{ reward }}
+            {{ reward.name }}
             <button matChipRemove>
               <mat-icon>cancel</mat-icon>
             </button>
@@ -17,6 +17,5 @@
     
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button matButton mat-dialog-close>Cancel</button>
   <button matButton [mat-dialog-close]="true" cdkFocusInitial>Save</button>
 </mat-dialog-actions>

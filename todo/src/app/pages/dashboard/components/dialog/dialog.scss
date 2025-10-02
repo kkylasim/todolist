@@ -1,0 +1,10 @@
+mat-chip-set {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  mat-chip {
+    background-color: #e0f2f1;
+    color: #00796b;
+  }

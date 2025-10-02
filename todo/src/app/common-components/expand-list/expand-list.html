@@ -9,8 +9,8 @@
 
         <mat-panel-description *ngIf="showTagsInHeader">
           <mat-chip-set>
-            <mat-chip *ngFor="let tag of panel.tags" [removable]="false">
-                {{ tag }}
+            <mat-chip *ngFor="let tag of getPanelTags(panel)" [removable]="false">
+                {{ tag.name }}
             </mat-chip>
           </mat-chip-set>
         </mat-panel-description>
@@ -27,8 +27,8 @@
     </mat-expansion-panel-header>
 
     <mat-chip-set *ngIf="!showTagsInHeader">
-      <mat-chip *ngFor="let tag of panel.tags" [removable]="false">
-          {{ tag }}
+      <mat-chip *ngFor="let tag of getPanelTags(panel)" [removable]="false">
+          {{ tag.name }}
       </mat-chip>
     </mat-chip-set>
 

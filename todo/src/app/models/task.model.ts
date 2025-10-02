@@ -6,7 +6,7 @@ export interface Task {
     duedate: string;
     duetime: string;
     recurring: Recurring | null;
-    tags: string[]
+    tags: number[]
   }
 
 export interface Recurring {
