@@ -1,0 +1,46 @@
+.layout {
+    display: block;
+    gap: 20px;
+}
+
+.title, .date {
+    display: flex;
+    gap: 5%;
+}
+
+.tags {
+    display: flex;
+    gap: 20px;
+}
+
+.description {
+    display: flex;
+    gap: 4%;
+}
+
+.recurring-frequency {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-left: 45px;
+}
+
+.recurring-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .recurring-frequency {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-left: 45px;
+  }
+
+.buttons {
+    justify-content: start;
+    display: flex;
+    margin-top: 8%;
+    gap: 30px;
+}

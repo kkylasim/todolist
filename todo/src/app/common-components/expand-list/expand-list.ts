@@ -51,16 +51,21 @@ export class ExpandList {
     });
   }
 
-  drop(event: CdkDragDrop<string[]>) {
+  drop(event: CdkDragDrop<any[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex,
-      );
+      // Only update the status and let the observable update the lists
+      const movedTask = event.previousContainer.data[event.previousIndex];
+      if (event.container.id === 'todoList') {
+        movedTask.status = 'Todo';
+      } else if (event.container.id === 'inProgressList') {
+        movedTask.status = 'Progress';
+      } else if (event.container.id === 'doneList') {
+        movedTask.status = 'Complete';
+      }
+      this.taskService.updateTask(movedTask.id, movedTask);
+      // Do NOT use transferArrayItem here; let the observable update the lists
     }
   }
 
@@ -112,7 +117,7 @@ export class ExpandList {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.taskService.deleteTask(panel.id);
-        this.tagService.cleanupUnusedTags(this.taskService.tasksSource.value);
+        this.tagService.cleanUpUnusedTags(this.taskService.tasksSource.value);
       }
     });
   }

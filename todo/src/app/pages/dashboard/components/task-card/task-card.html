@@ -11,39 +11,49 @@
       </div>
     </mat-card-header>
     <mat-card-content>
-      <div class="grid-container">
+      <div class="grid-container" cdkDropListGroup>
         <div class="item">
           <h3>To Do</h3>
-          <app-expand-list 
-          [panels]="todo" 
-          cdkDropList
-          #todoList="cdkDropList"
-          [cdkDropListData]="todo"
-          [cdkDropListConnectedTo]="[inProgressList, doneList]"
-          class="example-list"
-          (cdkDropListDropped)="drop($event)"></app-expand-list>
+          <div
+            cdkDropList
+            #todoList="cdkDropList"
+            [cdkDropListData]="todo"
+            [cdkDropListConnectedTo]="[inProgressList, doneList]"
+            class="example-list"
+            (cdkDropListDropped)="drop($event)"
+          >
+            <app-expand-list [panels]="todo"></app-expand-list>
+            <div *ngIf="todo.length === 0" class="empty-placeholder">No tasks</div>
+          </div>
         </div>
         <div class="item">
           <h3>In Progress</h3>
-          <app-expand-list [panels]="inProgress"
-          cdkDropList
-          #inProgressList="cdkDropList"
-          [cdkDropListData]="inProgress"
-          [cdkDropListConnectedTo]="[todoList, doneList]"
-          class="example-list"
-          (cdkDropListDropped)="drop($event)"
-          ></app-expand-list>
+          <div
+            cdkDropList
+            #inProgressList="cdkDropList"
+            [cdkDropListData]="inProgress"
+            [cdkDropListConnectedTo]="[todoList, doneList]"
+            class="example-list"
+            (cdkDropListDropped)="drop($event)"
+          >
+            <app-expand-list [panels]="inProgress"></app-expand-list>
+            <div *ngIf="inProgress.length === 0" class="empty-placeholder">No tasks</div>
+          </div>
         </div>
         <div class="item">
           <h3>Completed</h3>
-          <app-expand-list [panels]="completed"
-          cdkDropList
-          #doneList="cdkDropList"
-          [cdkDropListData]="completed"
-          [cdkDropListConnectedTo]="[todoList, inProgressList]"
-          class="example-list"
-          (cdkDropListDropped)="drop($event)"
-          ></app-expand-list>
+          <div
+            cdkDropList
+            #doneList="cdkDropList"
+            [cdkDropListData]="completed"
+            [cdkDropListConnectedTo]="[todoList, inProgressList]"
+            class="example-list"
+            style="min-height: 50px;"
+            (cdkDropListDropped)="drop($event)"
+          >
+            <app-expand-list [panels]="completed"></app-expand-list>
+            <div *ngIf="completed.length === 0" class="empty-placeholder">No tasks</div>
+          </div>
         </div>
       </div>
     </mat-card-content>

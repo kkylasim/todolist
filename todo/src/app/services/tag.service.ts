@@ -1,66 +1,86 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Tag } from '../models/tag.model';
-import { TaskService } from './task.service';
+import { StorageService } from './storage.service';
+
+const TAGS_KEY = 'tags';
 
 @Injectable({ providedIn: 'root' })
 export class TagService {
+  private tags: Tag[] = [];
   public tagsSubject = new BehaviorSubject<Tag[]>([]);
-  tags$: Observable<Tag[]> = this.tagsSubject.asObservable();
+  tags$ = this.tagsSubject.asObservable();
 
-  constructor(private taskService: TaskService) {
-    // Initialize tags from TaskService's initialTags
-    this.tagsSubject.next([...this.taskService.initialTags]);
+  constructor(private storage: StorageService) {
+    // Load tags from localStorage or use dummy data if not present
+    const storedTags = this.storage.getItem<Tag[]>(TAGS_KEY);
+    if (storedTags && storedTags.length > 0) {
+      this.tags = storedTags;
+    } else {
+      this.tags = [
+        { id: 1, name: 'Angular', color: '#DD0031' },
+        { id: 2, name: 'Writing', color: '#FFD700' },
+        { id: 3, name: 'Meeting', color: '#2196F3' },
+        { id: 4, name: 'Team', color: '#4CAF50' },
+        { id: 5, name: 'Code', color: '#9C27B0' },
+        { id: 6, name: 'Review', color: '#FF5722' },
+        { id: 7, name: 'Blog', color: '#FF9800' },
+        { id: 8, name: 'Design', color: '#E91E63' },
+        { id: 9, name: 'UI', color: '#00BCD4' },
+        { id: 10, name: 'Presentation', color: '#8BC34A' },
+        { id: 11, name: 'Client', color: '#795548' },
+        { id: 12, name: 'Deployment', color: '#607D8B' },
+        { id: 13, name: 'Release', color: '#F44336' }
+      ];
+      this.storage.setItem(TAGS_KEY, this.tags);
+    }
+    this.tagsSubject.next([...this.tags]);
   }
 
+  // Create
   addTag(tag: Tag) {
-    const tags = this.tagsSubject.value;
-    if (!tags.some(t => t.name === tag.name)) {
-      this.tagsSubject.next([...tags, tag]);
+    this.tags.push(tag);
+    this.storage.setItem(TAGS_KEY, this.tags);
+    this.tagsSubject.next([...this.tags]);
+  }
+
+  // Read
+  getTagById(id: number): Tag | undefined {
+    return this.tags.find(t => t.id === id);
+  }
+
+  // Update
+  updateTag(id: number, updatedTag: Tag) {
+    const idx = this.tags.findIndex(t => t.id === id);
+    if (idx !== -1) {
+      this.tags[idx] = { ...updatedTag };
+      this.storage.setItem(TAGS_KEY, this.tags);
+      this.tagsSubject.next([...this.tags]);
     }
   }
 
-  updateTag(updatedTag: Tag) {
-    const tags = this.tagsSubject.value.map(t => t.id === updatedTag.id ? updatedTag : t);
-    this.tagsSubject.next(tags);
-    // Update all tasks that reference this tag id
-    const updatedTasks = this.taskService.tasksSource.value.map(task => {
-      if (task.tags && task.tags.includes(updatedTag.id)) {
-        return { ...task };
-      }
-      return task;
-    });
-    this.taskService.tasksSource.next(updatedTasks);
+  // Delete
+  deleteTag(id: number) {
+    this.tags = this.tags.filter(t => t.id !== id);
+    this.storage.setItem(TAGS_KEY, this.tags);
+    this.tagsSubject.next([...this.tags]);
   }
 
-  deleteTag(tagId: number) {
-    const tags = this.tagsSubject.value.filter(t => t.id !== tagId);
-    this.tagsSubject.next(tags);
-    // Remove tag id from all tasks
-    const updatedTasks = this.taskService.tasksSource.value.map(task => {
-      if (task.tags && task.tags.includes(tagId)) {
-        return {
-          ...task,
-          tags: task.tags.filter((tid: number) => tid !== tagId)
-        };
-      }
-      return task;
-    });
-    this.taskService.tasksSource.next(updatedTasks);
+  // Get all tags
+  getAllTags(): Tag[] {
+    return [...this.tags];
   }
 
-  getTagById(id: number): Tag | undefined {
-    return this.tagsSubject.value.find(t => t.id === id);
-  }
-
-  cleanupUnusedTags(tasks: any[]) {
+  cleanUpUnusedTags(tasks: any[]) {
+    // Collect all tag ids used by remaining tasks
     const usedTagIds = new Set<number>();
     tasks.forEach(task => {
-      if (task.tags) {
+      if (Array.isArray(task.tags)) {
         task.tags.forEach((tagId: number) => usedTagIds.add(tagId));
       }
     });
-    const allTags = this.tagsSubject.value;
+    // Remove tags not used by any task
+    const allTags = [...this.tags];
     allTags.forEach(tag => {
       if (!usedTagIds.has(tag.id)) {
         this.deleteTag(tag.id);

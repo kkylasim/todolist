@@ -1,39 +1,42 @@
 <mat-accordion>
-  <mat-expansion-panel *ngFor="let panel of panels; let i = index" class="responsive-panel" hideToggle cdkDrag>
-    <mat-expansion-panel-header>
-      <div class="header-content">
-
-        <mat-panel-title>
-          {{ panel.title }}
-        </mat-panel-title>
-
-        <mat-panel-description *ngIf="showTagsInHeader">
-          <mat-chip-set>
-            <mat-chip *ngFor="let tag of getPanelTags(panel)" [removable]="false">
-                {{ tag.name }}
-            </mat-chip>
-          </mat-chip-set>
-        </mat-panel-description>
-
-        <span class="actions">
-          <button mat-icon-button (click)="editTask(panel)" matTooltip="Edit">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button color="warn" (click)="onDeleteClick(panel)" matTooltip="Delete">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </span>
-      </div>
-    </mat-expansion-panel-header>
-
-    <mat-chip-set *ngIf="!showTagsInHeader">
-      <mat-chip *ngFor="let tag of getPanelTags(panel)" [removable]="false">
-          {{ tag.name }}
-      </mat-chip>
-    </mat-chip-set>
-
-    <p style="font-size: small;">Due: {{ getDueDateTime(panel) | date:'short' }} <br>
-      Description: {{ panel.description }}<br>
-      Recurring: {{ panel.recurring? panel.recurring.frequency + ' times a ' + panel.recurring.type : 'None' }}</p>
-  </mat-expansion-panel>
+  <div *ngFor="let panel of panels; let i = index" cdkDrag>
+    <mat-expansion-panel class="responsive-panel" hideToggle>
+      <mat-expansion-panel-header>
+        <div class="header-content">
+          <mat-panel-title>
+            {{ panel.title }}
+          </mat-panel-title>
+          <mat-panel-description *ngIf="showTagsInHeader">
+            <mat-chip-set>
+              <mat-chip *ngFor="let tag of getPanelTags(panel)" [removable]="false">
+                  {{ tag.name }}
+              </mat-chip>
+            </mat-chip-set>
+          </mat-panel-description>
+          <span class="actions">
+            <button mat-icon-button (click)="editTask(panel)" matTooltip="Edit">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="onDeleteClick(panel)" matTooltip="Delete">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </span>
+        </div>
+      </mat-expansion-panel-header>
+      <mat-chip-set *ngIf="!showTagsInHeader">
+        <mat-chip *ngFor="let tag of getPanelTags(panel)" [removable]="false">
+            {{ tag.name }}
+        </mat-chip>
+      </mat-chip-set>
+      <p style="font-size: small;">Due: {{ getDueDateTime(panel) | date:'short' }} <br>
+        Description: {{ panel.description }}<br>
+        Recurring: {{ panel.recurring? panel.recurring.frequency + ' times a ' + panel.recurring.type : 'None' }}</p>
+    </mat-expansion-panel>
+  </div>
 </mat-accordion>
+<!--
+  Comments:
+  - Each panel is now wrapped in a div with cdkDrag, making it draggable.
+  - This ensures drag-and-drop works for each task/panel rendered by app-expand-list.
+  - If you want to style the drag handle, you can add a drag handle inside the panel.
+-->

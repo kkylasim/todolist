@@ -20,7 +20,7 @@ export class ProgressCard {
   readonly dialog = inject(MatDialog);
 
   constructor(private taskService: TaskService) {
-    this.taskService.completed$.subscribe(tasks => {
+    this.taskService.todaysCompleted$.subscribe(tasks => {
       this.tasksDone = tasks.length;
       this.tasksLeft = Math.max(this.tasksNeeded - this.tasksDone, 0);
     });

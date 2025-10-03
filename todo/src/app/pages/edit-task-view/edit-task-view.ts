@@ -44,8 +44,11 @@ export class EditTaskView implements OnInit {
     if (foundTask) {
       this.task = { ...foundTask };
       this.isRecurring = !!this.task.recurring;
+      // Ensure tags is number[]
+      if (!Array.isArray(this.task.tags)) {
+        this.task.tags = [];
+      }
     }
-    // Subscribe to centralized tags
     this.tagService.tags$.subscribe(tags => {
       this.tags = tags;
     });
@@ -53,7 +56,9 @@ export class EditTaskView implements OnInit {
 
   saveTask() {
     if (this.task.id) {
-      this.taskService.updateTask(this.task.id as number, this.task);
+      // Ensure tags is number[]
+      this.task.tags = this.task.tags?.map(tagId => Number(tagId)) || [];
+      this.taskService.updateTask(this.task.id as number, this.task as Task);
       this.router.navigate(['/list']);
     }
   }
