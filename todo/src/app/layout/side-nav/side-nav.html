@@ -3,27 +3,17 @@
     <mat-drawer-content>Main content</mat-drawer-content>
   </mat-drawer-container> -->
 
-  <section [class.sidenav]="isExpanded">
-    <div class="toggle">
-      <mat-icon (click)="toggleMenu.emit(null)">
-        {{ isExpanded ? "keyboard_backspace" : "dehaze" }}
-      </mat-icon>
-    </div>
-    <mat-list class="nav" *ngFor="let route of routeLinks">
+<section class="sidenav">
+  <mat-list class="nav">
+    <ng-container *ngFor="let route of routeLinks">
       <a
         mat-list-item
         routerLinkActive="active-link"
         class="hover"
-        routerLink="{{ route.link }}"
+        [routerLink]="route.link"
       >
-        <mat-icon
-          mat-list-icon
-          [matTooltip]="!isExpanded ? route.name : null"
-          matTooltipPosition="right"
-        >
-          {{ route.icon }}</mat-icon
-        >
-        <p matLine *ngIf="isExpanded">{{ route.name }}</p>
+        <p matLine>{{ route.name }}</p>
       </a>
-    </mat-list>
-  </section>
+    </ng-container>
+  </mat-list>
+</section>

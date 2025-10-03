@@ -22,7 +22,7 @@
   .nav {
     .active-link {
       background-color: #fafafa;
-      border-left: solid 3px #1976d2;
+      border-left: solid 3px #d7a8e3;
     }
   
     .hover {
@@ -39,10 +39,10 @@
       &:hover {
         cursor: pointer;
         background-color: #fafafa;
-        border-left: solid 3px #1976d2;
+        border-left: solid 3px #a669b5;
       }
     }
     mat-icon {
-      color: #1976d2;
+      color: #a669b5;
     }
   }

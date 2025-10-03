@@ -36,14 +36,14 @@
 <div class="tags">
     <h3>Add Tag(s)</h3>
     <mat-chip-listbox class="mat-mdc-chip-set-stacked" aria-label="Tag selection" [multiple]="true">
-        <mat-chip-option *ngFor="let tag of tags" [value]="tag.id" [selected]="newTask.tags?.includes(tag.id)" (click)="toggleTag(tag.id)" [style.background]="tag.color" style="width: auto; margin-top: 10px;">
+        <mat-chip-option *ngFor="let tag of tags" [value]="tag.id" [selected]="newTask.tags?.includes(tag.id)" (click)="toggleTag(tag.id)" [style.color]="tag.color" style="width: auto; margin-top: 10px; background: transparent; border-width: 0.9px; border-style: solid">
             {{tag.name}}
         </mat-chip-option>
     </mat-chip-listbox>
 </div>
 
 <div>
-    <mat-checkbox class="example-margin" [(ngModel)]="isRecurring">
+    <mat-checkbox class="example-margin" [(ngModel)]="isRecurring" (change)="setRecurring($event.checked)">
         <h3>Make Recurring</h3>
     </mat-checkbox>
     <div class="recurring-frequency" *ngIf="isRecurring && newTask.recurring">

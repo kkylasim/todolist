@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, signal, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, signal, Input, inject} from '@angular/core';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
@@ -6,10 +6,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CommonModule } from '@angular/common';
 import { TaskService } from '../../services/task.service';
-import { Task } from '../../models/task.model';
 import { MatChipsModule } from '@angular/material/chips';
 import { Router } from '@angular/router';
-import { Observable, of } from 'rxjs'; 
 import { TagService } from '../../services/tag.service';
 import { Tag } from '../../models/tag.model';
 import {
@@ -19,6 +17,8 @@ import {
   CdkDrag,
   CdkDropList,
 } from '@angular/cdk/drag-drop';
+import { ConfirmDialog } from '../confirm-dialog/confirm-dialog';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-expand-list',
@@ -29,7 +29,8 @@ import {
     MatTooltipModule,
     CommonModule,
     MatChipsModule,
-    CdkDropList, CdkDrag
+    CdkDropList, CdkDrag, ConfirmDialog,
+    MatDialogModule
   ],
   templateUrl: './expand-list.html',
   styleUrl: './expand-list.scss',
@@ -38,11 +39,13 @@ import {
 export class ExpandList {
   readonly panelOpenState = signal(false);
   tags: Tag[] = [];
+  showDeleteDialog = false;
+  taskToDelete: any = null;
 
   @Input() panels: any[] | null | undefined = [];
   @Input() showTagsInHeader: boolean = false;
 
-  constructor(private taskService: TaskService, private tagService: TagService, private router: Router) {
+  constructor(private taskService: TaskService, private tagService: TagService, private router: Router, private dialog: MatDialog) {
     this.tagService.tags$.subscribe(tags => {
       this.tags = tags;
     });
@@ -104,8 +107,25 @@ export class ExpandList {
     this.router.navigate(['/editTaskView', panel.id]);
   }
 
-  onDelete(panel: Task) {
-    console.log(this.panels);
-    console.log('Deleting:', panel);
+  onDeleteClick(panel: any) {
+    const dialogRef = this.dialog.open(ConfirmDialog);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.taskService.deleteTask(panel.id);
+      }
+    });
+  }
+
+  onConfirmDelete() {
+    if (this.taskToDelete) {
+      this.taskService.deleteTask(this.taskToDelete.id);
+    }
+    this.showDeleteDialog = false;
+    this.taskToDelete = null;
+  }
+
+  onCancelDelete() {
+    this.showDeleteDialog = false;
+    this.taskToDelete = null;
   }
 }

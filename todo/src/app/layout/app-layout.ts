@@ -50,16 +50,6 @@ import { MatButtonModule } from '@angular/material/button';
         </div>
       </mat-sidenav-content>
     </mat-sidenav-container>`
-  // `
-  //   <mat-sidenav-container>
-  //     <mat-sidenav mode="side" opened>
-  //       <app-side-nav></app-side-nav>
-  //     </mat-sidenav>
-  //     <mat-sidenav-content>
-  //       <router-outlet></router-outlet>
-  //     </mat-sidenav-content>
-  //   </mat-sidenav-container>
-  // `,
 })
 export class AppLayout {
   public isExpanded = true;
