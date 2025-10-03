@@ -5,7 +5,7 @@ import { TaskService } from './task.service';
 
 @Injectable({ providedIn: 'root' })
 export class TagService {
-  private tagsSubject = new BehaviorSubject<Tag[]>([]);
+  public tagsSubject = new BehaviorSubject<Tag[]>([]);
   tags$: Observable<Tag[]> = this.tagsSubject.asObservable();
 
   constructor(private taskService: TaskService) {
@@ -51,5 +51,20 @@ export class TagService {
 
   getTagById(id: number): Tag | undefined {
     return this.tagsSubject.value.find(t => t.id === id);
+  }
+
+  cleanupUnusedTags(tasks: any[]) {
+    const usedTagIds = new Set<number>();
+    tasks.forEach(task => {
+      if (task.tags) {
+        task.tags.forEach((tagId: number) => usedTagIds.add(tagId));
+      }
+    });
+    const allTags = this.tagsSubject.value;
+    allTags.forEach(tag => {
+      if (!usedTagIds.has(tag.id)) {
+        this.deleteTag(tag.id);
+      }
+    });
   }
 }

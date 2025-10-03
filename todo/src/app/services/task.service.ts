@@ -153,7 +153,7 @@ export class TaskService {
 
   //delete function
   deleteTask(id: number) {
-    this.tasks = this.tasks.filter( t => t.id !== id );
+    this.tasks = this.tasks.filter(t => t.id !== id);
     this.tasksSource.next([...this.tasks]);
   }
 }

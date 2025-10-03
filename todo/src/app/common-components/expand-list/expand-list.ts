@@ -112,20 +112,8 @@ export class ExpandList {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.taskService.deleteTask(panel.id);
+        this.tagService.cleanupUnusedTags(this.taskService.tasksSource.value);
       }
     });
-  }
-
-  onConfirmDelete() {
-    if (this.taskToDelete) {
-      this.taskService.deleteTask(this.taskToDelete.id);
-    }
-    this.showDeleteDialog = false;
-    this.taskToDelete = null;
-  }
-
-  onCancelDelete() {
-    this.showDeleteDialog = false;
-    this.taskToDelete = null;
   }
 }
