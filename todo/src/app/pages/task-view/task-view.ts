@@ -48,7 +48,7 @@ export class TaskView {
     this.isRecurring = value;
     if (value) {
       if (!this.newTask.recurring) {
-        this.newTask.recurring = { frequency: 1, type: 'day' };
+        this.newTask.recurring = { frequency: 2, type: 'day' };
       }
     } else {
       this.newTask.recurring = null;
@@ -66,39 +66,74 @@ export class TaskView {
     // Prevent adding a task without a title
     if (!this.newTask.title) return;
 
-    // Ensure duedate is always a string in YYYY-MM-DD format
-    if (this.newTask.duedate && Object.prototype.toString.call(this.newTask.duedate) === '[object Date]') {
-      const dateObj = typeof this.newTask.duedate === 'string' ? new Date(this.newTask.duedate) : this.newTask.duedate as Date;
-      const year = dateObj.getFullYear();
-      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-      const day = String(dateObj.getDate()).padStart(2, '0');
-      let dateStr = `${year}-${month}-${day}`;
-      this.newTask.duedate = dateStr;
+    // Ensure duedate is always a string in YYYY-MM-DD format (local)
+    let baseDate: Date | null = null;
+    if (this.newTask.duedate) {
+      baseDate = typeof this.newTask.duedate === 'string' ? new Date(this.newTask.duedate) : this.newTask.duedate as Date;
+      const year = baseDate.getFullYear();
+      const month = String(baseDate.getMonth() + 1).padStart(2, '0');
+      const day = String(baseDate.getDate()).padStart(2, '0');
+      this.newTask.duedate = `${year}-${month}-${day}`;
     }
-    // Ensure duetime is always a string in HH:mm format
-    if (this.newTask.duetime && Object.prototype.toString.call(this.newTask.duetime) === '[object Date]') {
-      const timeObj = typeof this.newTask.duetime === 'string' ? new Date(this.newTask.duetime) : this.newTask.duetime as Date;
+    // Ensure duetime is always a string in HH:mm format (local)
+    let baseTime = '';
+    if (this.newTask.duetime) {
+      const timeObj = typeof this.newTask.duetime === 'string' ? new Date(`1970-01-01T${this.newTask.duetime}`) : this.newTask.duetime as Date;
       const hours = String(timeObj.getHours()).padStart(2, '0');
       const minutes = String(timeObj.getMinutes()).padStart(2, '0');
-      let timeStr = `${hours}:${minutes}`;
-      this.newTask.duetime = timeStr;
+      baseTime = `${hours}:${minutes}`;
+      this.newTask.duetime = baseTime;
     }
 
-    // Always create a new unique ID for the new task
-    const createdTask: Task = {
-      ...this.newTask,
-      id: Date.now(), // Use current timestamp for unique ID
-      tags: [...this.selectedTags], // Save selected tag ids
-    };
+    // Recurring logic
+    if (this.isRecurring && this.newTask.recurring && this.newTask.recurring.frequency > 1) {
+      const tasksToCreate: Task[] = [];
+      for (let i = 0; i < this.newTask.recurring.frequency; i++) {
+        let dueDate: Date | null = baseDate ? new Date(baseDate) : null;
+        if (dueDate) {
+          if (i > 0) {
+            switch (this.newTask.recurring.type) {
+              case 'day':
+                dueDate.setDate(dueDate.getDate() + i);
+                break;
+              case 'week':
+                dueDate.setDate(dueDate.getDate() + i * 7);
+                break;
+              case 'month':
+                dueDate.setMonth(dueDate.getMonth() + i);
+                break;
+              default:
+                dueDate.setDate(dueDate.getDate() + i);
+            }
+          }
+        }
+        const year = dueDate ? dueDate.getFullYear() : '';
+        const month = dueDate ? String(dueDate.getMonth() + 1).padStart(2, '0') : '';
+        const day = dueDate ? String(dueDate.getDate()).padStart(2, '0') : '';
+        const duedateStr = dueDate ? `${year}-${month}-${day}` : '';
+        tasksToCreate.push({
+          ...this.newTask,
+          id: Date.now() + i, // Ensure unique ID
+          duedate: duedateStr,
+          duetime: baseTime,
+          tags: [...this.selectedTags],
+          recurring: this.newTask.recurring
+        });
+      }
+      tasksToCreate.forEach(task => this.taskService.addTask(task));
+    } else {
+      // Single task
+      const createdTask: Task = {
+        ...this.newTask,
+        id: Date.now(),
+        tags: [...this.selectedTags],
+      };
+      this.taskService.addTask(createdTask);
+    }
 
-    // Add the new task using the service
-    this.taskService.addTask(createdTask);
-
-    // Optionally reset the form fields after creation
+    // Reset form
     this.newTask = { id: Date.now(), title: '', status: 'Todo', description: '', duedate: '', duetime: '', recurring: null, tags: [] };
     this.selectedTags = [];
-
-    // Navigate to the list view after creating the task
     this.router.navigate(['/listView']);
   }
 

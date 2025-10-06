@@ -56,6 +56,23 @@ export class EditTaskView implements OnInit {
 
   saveTask() {
     if (this.task.id) {
+      // Ensure duedate is always a string in YYYY-MM-DD format (local)
+      if (this.task.duedate) {
+        const dateObj = typeof this.task.duedate === 'string' ? new Date(this.task.duedate) : this.task.duedate as Date;
+        const year = dateObj.getFullYear();
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const day = String(dateObj.getDate()).padStart(2, '0');
+        let dateStr = `${year}-${month}-${day}`;
+        this.task.duedate = dateStr;
+      }
+      // Ensure duetime is always a string in HH:mm format (local)
+      if (this.task.duetime) {
+        const timeObj = typeof this.task.duetime === 'string' ? new Date(`1970-01-01T${this.task.duetime}`) : this.task.duetime as Date;
+        const hours = String(timeObj.getHours()).padStart(2, '0');
+        const minutes = String(timeObj.getMinutes()).padStart(2, '0');
+        let timeStr = `${hours}:${minutes}`;
+        this.task.duetime = timeStr;
+      }
       // Ensure tags is number[]
       this.task.tags = this.task.tags?.map(tagId => Number(tagId)) || [];
       this.taskService.updateTask(this.task.id as number, this.task as Task);

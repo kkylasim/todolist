@@ -67,10 +67,18 @@ export class ExpandList implements OnInit, OnChanges {
     this.panels.forEach(task => {
       if (task.status !== 'Complete') {
         const dueDateTime = this.getDueDateTime(task);
-        if (dueDateTime && dueDateTime < now) {
-          if (task.status !== 'Overdue') {
-            task.status = 'Overdue';
-            this.taskService.updateTask(task.id, { ...task, status: 'Overdue' });
+        if (dueDateTime) {
+          if (dueDateTime < now) {
+            if (task.status !== 'Overdue') {
+              task.status = 'Overdue';
+              this.taskService.updateTask(task.id, { ...task, status: 'Overdue' });
+            }
+          } else {
+            // If the task was previously overdue but now has a future or today due date, reset to Todo
+            if (task.status === 'Overdue') {
+              task.status = 'Todo';
+              this.taskService.updateTask(task.id, { ...task, status: 'Todo' });
+            }
           }
         }
       }

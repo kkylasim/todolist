@@ -47,17 +47,17 @@
         <h3>Make Recurring</h3>
     </mat-checkbox>
     <div class="recurring-frequency" *ngIf="isRecurring && newTask.recurring">
+        <h3>Repeat daily/weekly/monthly for</h3>
         <mat-form-field>
             <mat-label>Number</mat-label>
-            <input matInput type="number" class="example-right-align" placeholder="0" [(ngModel)]="newTask.recurring.frequency"/>
+            <input matInput type="number" class="example-right-align" placeholder="2" [(ngModel)]="newTask.recurring.frequency" min="2"/>
         </mat-form-field>
-        <h3>times a</h3>
         <mat-form-field>
             <mat-label>Select</mat-label>
             <mat-select [(ngModel)]="newTask.recurring.type" name="recurringType">
-                <mat-option value="day">Day</mat-option>
-                <mat-option value="week">Week</mat-option>
-                <mat-option value="month">Month</mat-option>
+                <mat-option value="day">Day(s)</mat-option>
+                <mat-option value="week">Week(s)</mat-option>
+                <mat-option value="month">Month(s)</mat-option>
             </mat-select>
         </mat-form-field>
     </div>
