@@ -13,6 +13,17 @@
       cursor: pointer;
     }
   }
+
+  h2 {
+    text-align: center;
+    color: #a669b5;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .sidenav {
+    padding-top: 20px;  
+  }
   
   .toggle {
     width: 100%;
@@ -38,6 +49,7 @@
   
     mat-list-item,
     a {
+      text-align: center;
       border: none;
       box-sizing: border-box;
       text-decoration: none;

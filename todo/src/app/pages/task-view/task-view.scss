@@ -1,46 +1,79 @@
 .layout {
-    display: block;
-    gap: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
 }
 
 .title, .date {
-    display: flex;
-    gap: 5%;
+  display: flex;
+  gap: 5%;
 }
 
 .tags {
-    display: flex;
-    gap: 20px;
+  display: flex;
+  gap: 20px;
 }
 
 .description {
-    display: flex;
-    gap: 4%;
+  display: flex;
+  gap: 4%;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  width: 100%;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  width: 90%;
+}
+
+.form-row h3 {
+  min-width: 120px;
+  margin: 0;
+}
+
+mat-form-field {
+  flex: 1;
+  min-width: 120px;
+}
+
+.date-row {
+  width: 50%;
+}
+
+.recurring-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  width: 50%;
 }
 
 .recurring-frequency {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    margin-left: 45px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
 }
 
 .recurring-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .recurring-frequency {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    margin-left: 45px;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
 
 .buttons {
-    justify-content: start;
-    display: flex;
-    margin-top: 8%;
-    gap: 30px;
+  justify-content: flex-start;
+  display: flex;
+  margin-top: 8%;
+  gap: 30px;
 }

@@ -1,68 +1,65 @@
 <h1>Edit Task</h1>
 
 <div class="layout">
-    <div class="title">
-        <h3>Task Title</h3>
-        <mat-form-field style="width:40%">
-            <input matInput [(ngModel)]="task.title">
-        </mat-form-field>
+  <div class="form-grid">
+    <div class="form-row">
+      <h3>Task Title</h3>
+      <mat-form-field>
+        <input matInput [(ngModel)]="task.title">
+      </mat-form-field>
     </div>
-    
-    <div class="description">
-        <h3>Description</h3>
-        <mat-form-field style="width:80%; height:200px">
-            <mat-label>Enter Task Description</mat-label>
-            <textarea matInput [(ngModel)]="task.description"></textarea>
-        </mat-form-field>
+    <div class="form-row">
+      <h3>Description</h3>
+      <mat-form-field>
+        <mat-label>Enter Task Description</mat-label>
+        <textarea matInput [(ngModel)]="task.description"></textarea>
+      </mat-form-field>
     </div>
-    
-    <div class="date">
-        <h3>Due Date</h3>
-        <mat-form-field>
-            <mat-label>MM/DD/YYYY</mat-label>
-            <input matInput [matDatepicker]="datePicker" [(ngModel)]="task.duedate">
-            <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
-            <mat-datepicker #datePicker></mat-datepicker>
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Pick a time</mat-label>
-            <input matInput [matTimepicker]="timePicker" [(ngModel)]="task.duetime">
-            <mat-timepicker-toggle matIconSuffix [for]="timePicker"/>
-            <mat-timepicker #timePicker/>
-        </mat-form-field>          
+    <div class="form-row date-row">
+      <h3>Due Date</h3>
+      <mat-form-field>
+        <mat-label>MM/DD/YYYY</mat-label>
+        <input matInput [matDatepicker]="datePicker" [(ngModel)]="task.duedate">
+        <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
+        <mat-datepicker #datePicker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Pick a time</mat-label>
+        <input matInput [matTimepicker]="timePicker" [(ngModel)]="task.duetime">
+        <mat-timepicker-toggle matIconSuffix [for]="timePicker"/>
+        <mat-timepicker #timePicker/>
+      </mat-form-field>
     </div>
-</div>
-
-<div class="tags">
-    <h3>Add Tag(s)</h3>
-    <mat-chip-listbox class="mat-mdc-chip-set-stacked" aria-label="Tag selection" [multiple]="true" [(ngModel)]="task.tags">
+    <div class="form-row">
+      <h3>Add Tag(s)</h3>
+      <mat-chip-listbox class="mat-mdc-chip-set-stacked" aria-label="Tag selection" [multiple]="true" [(ngModel)]="task.tags">
         <mat-chip-option *ngFor="let tag of tags" [value]="tag.id" style="width: auto; margin-top: 10px;">{{tag.name}}</mat-chip-option>
-    </mat-chip-listbox>
-</div>
-
-<div>
-    <mat-checkbox class="example-margin" [(ngModel)]="isRecurring">
-        <h3>Make Recurring</h3>
-    </mat-checkbox>
-    <div class="recurring-frequency" *ngIf="isRecurring && task.recurring">
-        <mat-form-field>
-            <mat-label>Number</mat-label>
-            <input matInput type="number" class="example-right-align" placeholder="0" [(ngModel)]="task.recurring.frequency"/>
-        </mat-form-field>
-        <h3>times a</h3>
-        <mat-form-field>
-            <mat-label>Select</mat-label>
-            <mat-select [(ngModel)]="task.recurring.type" name="recurringType">
-                <mat-option value="day">Day</mat-option>
-                <mat-option value="week">Week</mat-option>
-                <mat-option value="month">Month</mat-option>
-            </mat-select>
-        </mat-form-field>
+      </mat-chip-listbox>
     </div>
-</div>
-
-<div class="buttons">
-    <app-button icon="cancel" label="Cancel"></app-button>
-    <app-button label="Save" (click)="saveTask()"></app-button>
+    <div class="form-row recurring-row">
+      <mat-checkbox class="example-margin" [(ngModel)]="isRecurring">
+        <h3>Make Recurring</h3>
+      </mat-checkbox>
+      <div class="recurring-frequency" *ngIf="isRecurring && task.recurring">
+        <h3>Repeat daily/weekly/monthly for</h3>
+        <mat-form-field>
+          <mat-label>Number</mat-label>
+          <input matInput type="number" class="example-right-align" placeholder="2" [(ngModel)]="task.recurring.frequency" min="2"/>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Select</mat-label>
+          <mat-select [(ngModel)]="task.recurring.type" name="recurringType">
+            <mat-option value="day">Days</mat-option>
+            <mat-option value="week">Weeks</mat-option>
+            <mat-option value="month">Months</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="form-row buttons">
+      <app-button icon="cancel" label="Cancel"></app-button>
+      <app-button label="Save" (click)="saveTask()"></app-button>
+    </div>
+  </div>
 </div>
 

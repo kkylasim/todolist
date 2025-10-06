@@ -1,5 +1,5 @@
 mat-card.example-card {
-    padding: 10px;
+    padding: 15px;
     margin-top: 20px;
     width: 100%;
     display: flex;
@@ -63,4 +63,9 @@ mat-card-content {
     max-height: 300px; /* scroll if content is too large */
     overflow-y: auto;
     display: block;
+}
+
+.mat-mdc-card-header {
+    padding-right: 16px;
+    padding-left: 0;
 }
