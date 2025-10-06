@@ -18,13 +18,13 @@
             cdkDropList
             #todoList="cdkDropList"
             id="todoList"
-            [cdkDropListData]="todo"
+            [cdkDropListData]="todo$ | async"
             [cdkDropListConnectedTo]="[inProgressList, doneList]"
             class="example-list"
             (cdkDropListDropped)="drop($event)"
           >
-            <app-expand-list [panels]="todo"></app-expand-list>
-            <div *ngIf="todo.length === 0" class="empty-placeholder">No tasks</div>
+            <app-expand-list [panels]="todo$ | async"></app-expand-list>
+            <div *ngIf="(todo$ | async)?.length === 0" class="empty-placeholder">No tasks</div>
           </div>
         </div>
         <div class="item">
@@ -33,13 +33,13 @@
             cdkDropList
             #inProgressList="cdkDropList"
             id="inProgressList"
-            [cdkDropListData]="inProgress"
+            [cdkDropListData]="inProgress$ | async"
             [cdkDropListConnectedTo]="[todoList, doneList]"
             class="example-list"
             (cdkDropListDropped)="drop($event)"
           >
-            <app-expand-list [panels]="inProgress"></app-expand-list>
-            <div *ngIf="inProgress.length === 0" class="empty-placeholder">No tasks</div>
+            <app-expand-list [panels]="inProgress$ | async"></app-expand-list>
+            <div *ngIf="(inProgress$ | async)?.length === 0" class="empty-placeholder">No tasks</div>
           </div>
         </div>
         <div class="item">
@@ -48,14 +48,14 @@
             cdkDropList
             #doneList="cdkDropList"
             id="doneList"
-            [cdkDropListData]="completed"
+            [cdkDropListData]="completed$ | async"
             [cdkDropListConnectedTo]="[todoList, inProgressList]"
             class="example-list"
             style="min-height: 50px;"
             (cdkDropListDropped)="drop($event)"
           >
-            <app-expand-list [panels]="completed"></app-expand-list>
-            <div *ngIf="completed.length === 0" class="empty-placeholder">No tasks</div>
+            <app-expand-list [panels]="completed$ | async"></app-expand-list>
+            <div *ngIf="(completed$ | async)?.length === 0" class="empty-placeholder">No tasks</div>
           </div>
         </div>
       </div>

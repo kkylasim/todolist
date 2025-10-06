@@ -20,10 +20,11 @@ import { ChangeDetectorRef } from '@angular/core';
 export class ProgressCard {
   tasksDone = 0;
   tasksLeft = 0;
-  tasksNeeded = 1;
+  tasksNeeded = 2;
   level = 1;
   readonly dialog = inject(MatDialog);
   private isLevelUpDialogOpen = false;
+  private prevTasksLeft: number | null = null;
 
   constructor(
     private taskService: TaskService,
@@ -34,15 +35,18 @@ export class ProgressCard {
     this.progressService.state$.subscribe((state: ProgressState) => {
       this.level = state.level;
       this.tasksDone = state.tasksDone;
-      this.tasksNeeded = state.tasksNeeded || 1;
+      this.tasksNeeded = state.tasksNeeded || 2;
       this.tasksLeft = Math.max(this.tasksNeeded - this.tasksDone, 0);
       this.cdr.markForCheck();
-      this.checkLevelUp(state.hasLeveledUp);
+      // Only check level up if tasksLeft changed
+      if (this.prevTasksLeft !== this.tasksLeft) {
+        this.checkLevelUp(state.hasLeveledUp);
+        this.prevTasksLeft = this.tasksLeft;
+      }
     });
   }
 
   levelUp() {
-    if (this.isLevelUpDialogOpen) return;
     this.isLevelUpDialogOpen = true;
     this.progressService.setHasLeveledUp(true);
     // Default rewards
@@ -63,12 +67,14 @@ export class ProgressCard {
     dialogRef.afterClosed().subscribe(() => {
       this.progressService.incrementLevel();
       this.isLevelUpDialogOpen = false;
-      // No need to reset hasLeveledUp here, handled in incrementLevel
+      this.cdr.detectChanges(); // Ensure Angular picks up the state change
     });
   }
 
   checkLevelUp(hasLeveledUp?: boolean) {
-    if (this.tasksLeft === 0 && !hasLeveledUp && !this.isLevelUpDialogOpen) {
+    console.log('Checking level up:', { hasLeveledUp, tasksLeft: this.tasksLeft, isLevelUpDialogOpen: this.isLevelUpDialogOpen });
+    if (this.isLevelUpDialogOpen) return; 
+    if (this.tasksLeft === 0 && !hasLeveledUp) {
       this.levelUp();
     }
   }

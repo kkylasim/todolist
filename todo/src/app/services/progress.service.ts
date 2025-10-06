@@ -12,7 +12,7 @@ const PROGRESS_KEY = 'progress';
 
 @Injectable({ providedIn: 'root' })
 export class ProgressService {
-  private defaultState: ProgressState = { level: 1, tasksDone: 0, tasksNeeded: 1, hasLeveledUp: false };
+  private defaultState: ProgressState = { level: 1, tasksDone: 0, tasksNeeded: 2, hasLeveledUp: false };
   private stateSource = new BehaviorSubject<ProgressState>(this.loadState());
   state$ = this.stateSource.asObservable();
 
