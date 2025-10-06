@@ -2,6 +2,11 @@
     width: 100%;
 }
 
+.status-sort {
+    display: flex;
+    justify-content: space-between;
+}
+
 .sort {
     display: flex;
     gap: 15px;
