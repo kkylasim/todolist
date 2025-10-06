@@ -17,6 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
         box-sizing: border-box;
         padding-top: 5px;
         padding-right: 20px;
+        padding-left: 20px;
       }
       .mat-sidenav {
         width: 300px
