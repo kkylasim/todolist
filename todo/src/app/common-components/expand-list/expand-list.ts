@@ -55,8 +55,13 @@ export class ExpandList {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      // Only update the status and let the observable update the lists
       const movedTask = event.previousContainer.data[event.previousIndex];
+      console.log('ExpandList drop:', {
+        id: movedTask.id,
+        prevStatus: movedTask.status,
+        prevDueDate: movedTask.duedate,
+        targetList: event.container.id
+      });
       if (event.container.id === 'todoList') {
         movedTask.status = 'Todo';
       } else if (event.container.id === 'inProgressList') {
@@ -64,8 +69,8 @@ export class ExpandList {
       } else if (event.container.id === 'doneList') {
         movedTask.status = 'Complete';
       }
+      console.log('ExpandList updating task:', movedTask);
       this.taskService.updateTask(movedTask.id, movedTask);
-      // Do NOT use transferArrayItem here; let the observable update the lists
     }
   }
 
@@ -106,6 +111,19 @@ export class ExpandList {
   getPanelTags(panel: any): Tag[] {
     if (!panel.tags || !this.tags) return [];
     return panel.tags.map((id: number) => this.tags.find(tag => tag.id === id)).filter(Boolean) as Tag[];
+  }
+
+  getStatusClass(panel: any): string {
+    switch (panel.status) {
+      case 'Complete':
+        return 'status-complete'; // green
+      case 'Progress':
+        return 'status-progress'; // orange
+      case 'Todo':
+        return 'status-todo'; // red
+      default:
+        return '';
+    }
   }
 
   editTask(panel: any) {

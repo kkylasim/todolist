@@ -66,6 +66,24 @@ export class TaskView {
     // Prevent adding a task without a title
     if (!this.newTask.title) return;
 
+    // Ensure duedate is always a string in YYYY-MM-DD format
+    if (this.newTask.duedate && Object.prototype.toString.call(this.newTask.duedate) === '[object Date]') {
+      const dateObj = typeof this.newTask.duedate === 'string' ? new Date(this.newTask.duedate) : this.newTask.duedate as Date;
+      const year = dateObj.getFullYear();
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const day = String(dateObj.getDate()).padStart(2, '0');
+      let dateStr = `${year}-${month}-${day}`;
+      this.newTask.duedate = dateStr;
+    }
+    // Ensure duetime is always a string in HH:mm format
+    if (this.newTask.duetime && Object.prototype.toString.call(this.newTask.duetime) === '[object Date]') {
+      const timeObj = typeof this.newTask.duetime === 'string' ? new Date(this.newTask.duetime) : this.newTask.duetime as Date;
+      const hours = String(timeObj.getHours()).padStart(2, '0');
+      const minutes = String(timeObj.getMinutes()).padStart(2, '0');
+      let timeStr = `${hours}:${minutes}`;
+      this.newTask.duetime = timeStr;
+    }
+
     // Always create a new unique ID for the new task
     const createdTask: Task = {
       ...this.newTask,
@@ -83,4 +101,15 @@ export class TaskView {
     // Navigate to the list view after creating the task
     this.router.navigate(['/listView']);
   }
+
+  cancel() {
+    this.resetForm();
+    this.router.navigate(['/listView']);
+  }
+
+  resetForm() {
+    this.newTask = { id: Date.now(), title: '', status: 'Todo', description: '', duedate: '', duetime: '', recurring: null, tags: [] };
+    this.selectedTags = [];
+  }
+
 }

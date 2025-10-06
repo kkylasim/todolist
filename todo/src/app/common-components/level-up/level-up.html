@@ -1,0 +1,16 @@
+<div class="level-up-dialog">
+  <div class="animation">
+    <div class="confetti"></div>
+    <mat-icon class="trophy">emoji_events</mat-icon>
+  </div>
+  <h2>Congratulations!</h2>
+  <p>You leveled up to <strong>Level {{ data.level }}</strong>!</p>
+  <p>Your reward:</p>
+  <div class="reward">
+    <mat-chip color="primary">{{ data.reward.name }}</mat-chip>
+  </div>
+  <p>Keep up the great work!</p>
+  <div class="actions">
+    <button mat-button color="primary" (click)="closeDialog()">Awesome!</button>
+  </div>
+</div>

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { Task } from '../models/task.model';
 import { StorageService } from './storage.service';
+import { ProgressService } from '../services/progress.service';
 
 const TASKS_KEY = 'tasks';
 
@@ -53,7 +54,7 @@ export class TaskService {
           status: 'Todo',
           title: 'Write Blog Post',
           description: 'Post about new Angular features',
-          duedate: '2025-10-07',
+          duedate: '2025-10-06',
           duetime: '11:00',
           recurring: { frequency: 2, type: 'Monthly' },
           tags: [7, 1]
@@ -63,7 +64,7 @@ export class TaskService {
           status: 'Progress',
           title: 'Design Mockups',
           description: 'Create UI mockups for new feature',
-          duedate: '2025-10-03',
+          duedate: '2025-10-06',
           duetime: '09:00',
           recurring: null,
           tags: [8, 9]
@@ -73,7 +74,7 @@ export class TaskService {
           status: 'Todo',
           title: 'Prepare Presentation',
           description: 'Prepare slides for client meeting',
-          duedate: '2025-10-04',
+          duedate: '2025-10-06',
           duetime: '13:00',
           recurring: null,
           tags: [10, 11]
@@ -83,7 +84,7 @@ export class TaskService {
           status: 'Complete',
           title: 'Deploy Update',
           description: 'Deploy the latest release to production',
-          duedate: '2025-09-29',
+          duedate: '2025-10-06',
           duetime: '17:00',
           recurring: { frequency: 1, type: 'Weekly' },
           tags: [12, 13]
@@ -137,6 +138,7 @@ export class TaskService {
 
   // Create
   addTask(task: Task) {
+    console.log(task)
     this.tasks.push(task);
     this.storage.setItem(TASKS_KEY, this.tasks);
     this.tasksSource.next([...this.tasks]);
@@ -154,6 +156,16 @@ export class TaskService {
       this.tasks[idx] = { ...updatedTask };
       this.storage.setItem(TASKS_KEY, this.tasks);
       this.tasksSource.next([...this.tasks]);
+      // Update progress after any task status change
+      const completedCount = this.tasks.filter(t => t.status === 'Complete' && t.duedate === this.getToday()).length;
+      if (typeof window !== 'undefined' && (window as any).ng && (window as any).ng.getInjector) {
+        try {
+          const injector = (window as any).ng.getInjector(document.querySelector('app-root'));
+          const progressService = injector.get(ProgressService);
+          progressService.setTasksDone(completedCount);
+        } catch (e) {
+        }
+      }
     }
   }
 

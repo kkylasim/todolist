@@ -4,6 +4,7 @@
         <div class="title">
           <mat-card-title>
             <h1>My Progress</h1>
+            <h4>Your current level: {{ level }}</h4>
           </mat-card-title>
           <mat-card-actions>
             <app-button icon="add" label="Create Reward" (click)="openDialog()"></app-button>
@@ -13,7 +14,7 @@
     <mat-card-content class="content">
       <app-chart [tasksDone]="tasksDone" [tasksLeft]="tasksLeft" [tasksNeeded]="tasksNeeded"></app-chart>
       <h4 style="font-size: large; text-align: center;">
-        {{ tasksLeft }} tasks left to next reward. Keep it up!
+        {{ tasksLeft }} task(s) left to next reward. Keep it up!
       </h4>
     </mat-card-content>
   </mat-card>

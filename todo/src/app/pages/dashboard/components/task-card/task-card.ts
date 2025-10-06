@@ -14,10 +14,11 @@ import {
   CdkDropList,
 } from '@angular/cdk/drag-drop';
 import { NgIf } from '@angular/common';
+import { CardList } from '../../../../common-components/card-list/card-list';
 
 @Component({
   selector: 'app-task-card',
-  imports: [ MatCardModule, CdkDropListGroup, ExpandList, Button, RouterLink, AsyncPipe, CdkDropList, CdkDrag, NgIf ],
+  imports: [ CardList, MatCardModule, CdkDropListGroup, ExpandList, Button, RouterLink, AsyncPipe, CdkDropList, CdkDrag, NgIf ],
   templateUrl: './task-card.html',
   styleUrl: './task-card.scss'
 })
@@ -44,6 +45,12 @@ export class TaskCard {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       const movedTask = event.previousContainer.data[event.previousIndex];
+      // console.log('Drag drop:', {
+      //   id: movedTask.id,
+      //   prevStatus: movedTask.status,
+      //   prevDueDate: movedTask.duedate,
+      //   targetList: event.container.id
+      // });
       if (event.container.id === 'todoList') {
         movedTask.status = 'Todo';
       } else if (event.container.id === 'inProgressList') {
@@ -51,6 +58,7 @@ export class TaskCard {
       } else if (event.container.id === 'doneList') {
         movedTask.status = 'Complete';
       }
+      // console.log('Updating task:', movedTask);
       this.taskService.updateTask(movedTask.id, movedTask);
     }
   }

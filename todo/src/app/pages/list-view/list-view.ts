@@ -22,6 +22,7 @@ export class ListView {
   tasks: any[] = [];
   tags: any[] = [];
   selectedTags: number[] = [];
+  selectedStatus: string[] = [];
 
   filterTasksByTags(tasks: any[]): any[] {
     if (this.selectedTags.length === 0) return tasks;
@@ -30,9 +31,27 @@ export class ListView {
     );
   }
 
+  filterTasksByStatus(tasks: any[]): any[] {
+    if (this.selectedStatus.length === 0) return tasks;
+    return tasks.filter(task => {
+      const statusMap: { [key: string]: string } = {
+        'To do': 'Todo',
+        'In progress': 'Progress',
+        'Completed': 'Complete'
+      };
+      return this.selectedStatus.includes(Object.keys(statusMap).find(key => statusMap[key] === task.status) || '');
+    });
+  }
+
+  filterTasks(tasks: any[]): any[] {
+    let filtered = this.filterTasksByTags(tasks);
+    filtered = this.filterTasksByStatus(filtered);
+    return filtered;
+  }
+
   constructor(private taskService: TaskService, private tagService: TagService) {
     this.taskService.filteredtasks$.subscribe(tasks => {
-      this.tasks = this.filterTasksByTags(tasks);
+      this.tasks = this.filterTasks(tasks);
     });
     this.tagService.tags$.subscribe(tags => {
       this.tags = tags;
@@ -48,10 +67,15 @@ export class ListView {
     this.taskService.setSearchTerm('');
   }
 
+  onStatusSelectionChange() {
+    this.taskService.filteredtasks$.subscribe(tasks => {
+      this.tasks = this.filterTasks(tasks);
+    });
+  }
+
   onTagSelectionChange() {
     this.taskService.filteredtasks$.subscribe(tasks => {
-      this.tasks = this.filterTasksByTags(tasks);
-      console.log(this.tasks);
+      this.tasks = this.filterTasks(tasks);
     });
   }
 

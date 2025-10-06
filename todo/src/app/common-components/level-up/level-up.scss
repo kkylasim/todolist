@@ -1,0 +1,58 @@
+.level-up-dialog {
+  text-align: center;
+  padding: 2rem;
+}
+
+.animation {
+  position: relative;
+  height: 80px;
+  margin-bottom: 1rem;
+}
+
+.trophy {
+  font-size: 48px;
+  color: gold;
+  animation: bounce 1s infinite alternate;
+}
+
+@keyframes bounce {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-20px); }
+}
+
+.confetti {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.confetti::before, .confetti::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: repeating-linear-gradient(90deg, #ff4081, #ffd740, #40c4ff, #69f0ae, #ff4081);
+  animation: confetti-fall 1.2s linear infinite;
+}
+
+.confetti::after {
+  left: 20px;
+  animation-delay: 0.6s;
+}
+
+@keyframes confetti-fall {
+  0% { top: 0; opacity: 1; }
+  100% { top: 60px; opacity: 0; }
+}
+
+.reward {
+  margin: 1rem 0;
+}
+
+.actions {
+  margin-top: 2rem;
+}

@@ -11,6 +11,14 @@
             <mat-chip-option *ngFor="let tag of tags" [value]="tag.id" style="width: auto; margin-top: 10px;">{{tag.name}}</mat-chip-option>
         </mat-chip-listbox>
     </div>
+    <div class="status">
+      <h3>Filter by Status: </h3>
+      <mat-chip-listbox class="mat-mdc-chip-set-stacked" aria-label="Status selection" [multiple]="true" [(ngModel)]="selectedStatus" (ngModelChange)="onStatusSelectionChange()">
+          <mat-chip-option [value]="'To do'" style="width: auto; margin-top: 10px;">To do</mat-chip-option>
+          <mat-chip-option [value]="'In progress'" style="width: auto; margin-top: 10px;">In progress</mat-chip-option>
+          <mat-chip-option [value]="'Completed'" style="width: auto; margin-top: 10px;">Completed</mat-chip-option>
+      </mat-chip-listbox>
+  </div>
     <div class="sort">
         <h3>Sort by: </h3>
         <mat-form-field>

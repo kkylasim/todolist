@@ -1,7 +1,7 @@
 <mat-accordion>
   <div *ngFor="let panel of panels; let i = index" cdkDrag>
     <mat-expansion-panel class="responsive-panel" hideToggle>
-      <mat-expansion-panel-header>
+      <mat-expansion-panel-header cdkDragHandle>
         <div class="header-content">
           <mat-panel-title>
             {{ panel.title }}
@@ -14,6 +14,7 @@
             </mat-chip-set>
           </mat-panel-description>
           <span class="actions">
+            <span class="status-indicator" [ngClass]="getStatusClass(panel)"></span>
             <button mat-icon-button (click)="editTask(panel)" matTooltip="Edit">
               <mat-icon>edit</mat-icon>
             </button>
@@ -39,4 +40,5 @@
   - Each panel is now wrapped in a div with cdkDrag, making it draggable.
   - This ensures drag-and-drop works for each task/panel rendered by app-expand-list.
   - If you want to style the drag handle, you can add a drag handle inside the panel.
+  - Added status indicator beside the edit button, color-coded by status.
 -->

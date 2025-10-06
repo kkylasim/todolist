@@ -79,3 +79,22 @@
   display: block;
   overflow: visible;
 }
+
+.status-indicator {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+.status-complete {
+  background-color: #43a047; 
+}
+.status-progress {
+  background-color: #ff9800; 
+}
+.status-todo {
+  background-color: #e53935; 
+}
