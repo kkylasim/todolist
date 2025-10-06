@@ -18,3 +18,16 @@
     gap: 5px;
     padding-bottom: 5px;
 }
+
+.status-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .status-todo { background: #e57373; }      // red
+  .status-progress { background: #ffb74d; }  // orange
+  .status-complete { background: #81c784; }  // green
+  .status-overdue { background: #bdbdbd; }   // grey

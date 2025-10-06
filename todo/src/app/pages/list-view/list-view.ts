@@ -23,6 +23,7 @@ export class ListView {
   tags: any[] = [];
   selectedTags: number[] = [];
   selectedStatus: string[] = [];
+  sortBy: string = '';
 
   filterTasksByTags(tasks: any[]): any[] {
     if (this.selectedTags.length === 0) return tasks;
@@ -37,15 +38,27 @@ export class ListView {
       const statusMap: { [key: string]: string } = {
         'To do': 'Todo',
         'In progress': 'Progress',
-        'Completed': 'Complete'
+        'Completed': 'Complete',
+        'Overdue': 'Overdue'
       };
       return this.selectedStatus.includes(Object.keys(statusMap).find(key => statusMap[key] === task.status) || '');
+    });
+  }
+
+  sortTasksByDueDate(tasks: any[]): any[] {
+    return tasks.slice().sort((a, b) => {
+      const aDate = new Date(`${a.duedate}T${a.duetime || '00:00'}`);
+      const bDate = new Date(`${b.duedate}T${b.duetime || '00:00'}`);
+      return aDate.getTime() - bDate.getTime();
     });
   }
 
   filterTasks(tasks: any[]): any[] {
     let filtered = this.filterTasksByTags(tasks);
     filtered = this.filterTasksByStatus(filtered);
+    if (this.sortBy === 'dueDate') {
+      filtered = this.sortTasksByDueDate(filtered);
+    }
     return filtered;
   }
 
@@ -87,5 +100,11 @@ export class ListView {
       this.selectedTags.splice(index, 1);
     }
     this.onTagSelectionChange();
+  }
+
+  onSortChange() {
+    this.taskService.filteredtasks$.subscribe(tasks => {
+      this.tasks = this.filterTasks(tasks);
+    });
   }
 }

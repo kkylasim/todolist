@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, signal, Input, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, signal, Input, inject, OnInit, OnChanges, SimpleChanges} from '@angular/core';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
@@ -36,7 +36,7 @@ import {MatDialog, MatDialogModule} from '@angular/material/dialog';
   styleUrl: './expand-list.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ExpandList {
+export class ExpandList implements OnInit, OnChanges {
   readonly panelOpenState = signal(false);
   tags: Tag[] = [];
   showDeleteDialog = false;
@@ -48,6 +48,32 @@ export class ExpandList {
   constructor(private taskService: TaskService, private tagService: TagService, private router: Router, private dialog: MatDialog) {
     this.tagService.tags$.subscribe(tags => {
       this.tags = tags;
+    });
+  }
+
+  ngOnInit() {
+    this.checkAndUpdateOverdueTasks();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['panels']) {
+      this.checkAndUpdateOverdueTasks();
+    }
+  }
+
+  checkAndUpdateOverdueTasks() {
+    if (!this.panels) return;
+    const now = new Date();
+    this.panels.forEach(task => {
+      if (task.status !== 'Complete') {
+        const dueDateTime = this.getDueDateTime(task);
+        if (dueDateTime && dueDateTime < now) {
+          if (task.status !== 'Overdue') {
+            task.status = 'Overdue';
+            this.taskService.updateTask(task.id, { ...task, status: 'Overdue' });
+          }
+        }
+      }
     });
   }
 
@@ -121,6 +147,8 @@ export class ExpandList {
         return 'status-progress'; // orange
       case 'Todo':
         return 'status-todo'; // red
+      case 'Overdue':
+        return 'status-overdue'; // grey
       default:
         return '';
     }

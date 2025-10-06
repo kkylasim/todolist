@@ -14,17 +14,30 @@
     <div class="status">
       <h3>Filter by Status: </h3>
       <mat-chip-listbox class="mat-mdc-chip-set-stacked" aria-label="Status selection" [multiple]="true" [(ngModel)]="selectedStatus" (ngModelChange)="onStatusSelectionChange()">
-          <mat-chip-option [value]="'To do'" style="width: auto; margin-top: 10px;">To do</mat-chip-option>
-          <mat-chip-option [value]="'In progress'" style="width: auto; margin-top: 10px;">In progress</mat-chip-option>
-          <mat-chip-option [value]="'Completed'" style="width: auto; margin-top: 10px;">Completed</mat-chip-option>
+          <mat-chip-option [value]="'To do'" style="width: auto; margin-top: 10px; display: flex; align-items: center;">
+            <span class="status-indicator status-todo"></span>
+            To do
+          </mat-chip-option>
+          <mat-chip-option [value]="'In progress'" style="width: auto; margin-top: 10px; display: flex; align-items: center;">
+            <span class="status-indicator status-progress"></span>
+            In progress
+          </mat-chip-option>
+          <mat-chip-option [value]="'Completed'" style="width: auto; margin-top: 10px; display: flex; align-items: center;">
+            <span class="status-indicator status-complete"></span>
+            Completed
+          </mat-chip-option>
+          <mat-chip-option [value]="'Overdue'" style="width: auto; margin-top: 10px; display: flex; align-items: center;">
+            <span class="status-indicator status-overdue"></span>
+            Overdue
+          </mat-chip-option>
       </mat-chip-listbox>
   </div>
     <div class="sort">
         <h3>Sort by: </h3>
         <mat-form-field>
             <mat-label>Select</mat-label>
-            <mat-select>
-              <mat-option value="one">Due Date</mat-option>
+            <mat-select [(ngModel)]="sortBy" (ngModelChange)="onSortChange()">
+              <mat-option value="dueDate">Due Date</mat-option>
             </mat-select>
         </mat-form-field>
     </div>

@@ -89,12 +89,8 @@
   margin-top: auto;
   margin-bottom: auto;
 }
-.status-complete {
-  background-color: #43a047; 
-}
-.status-progress {
-  background-color: #ff9800; 
-}
-.status-todo {
-  background-color: #e53935; 
-}
+
+.status-todo { background: #e57373; }      // red
+.status-progress { background: #ffb74d; }  // orange
+.status-complete { background: #81c784; }  // green
+.status-overdue { background: #bdbdbd; }   // grey
