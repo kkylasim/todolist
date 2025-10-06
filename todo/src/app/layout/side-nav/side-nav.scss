@@ -1,13 +1,18 @@
-// .container {
-//     width: auto;
-//     height: 200px;
-//     margin: 10px;
-//     border: 1px solid #555;
-//     background: #eee;
-//   }
-// .sidenav {
-//     width: 250px;
-//   }
+  .add-tag-btn {
+    width: 90%;
+    margin: 20px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: bold;
+    background-color: #a669b5;
+    color: white;
+    &:hover {
+      background-color: #d1c1d5;
+      cursor: pointer;
+    }
+  }
   
   .toggle {
     width: 100%;

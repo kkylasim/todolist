@@ -7,6 +7,8 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatButtonModule } from "@angular/material/button";
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';  
+import { MatDialog } from '@angular/material/dialog';
+import { TagDialog } from '../../common-components/tag-dialog/tag-dialog';
 
 @Component({
   selector: 'app-side-nav',
@@ -25,6 +27,14 @@ import { CommonModule } from '@angular/common';
 export class SideNav {
   @Input() isExpanded: boolean = true;
   @Output() toggleMenu = new EventEmitter();
+
+  constructor(private dialog: MatDialog) {}
+
+  openTagDialog() {
+    this.dialog.open(TagDialog, {
+      width: '400px'
+    });
+  }
 
   public routeLinks = [
     { link: "/dashboard", name: "Dashboard", icon: "dashboard" },
