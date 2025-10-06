@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Chart as ChartJS, Plugin } from 'chart.js/auto';
 
 @Component({
@@ -7,7 +7,7 @@ import { Chart as ChartJS, Plugin } from 'chart.js/auto';
   template: `<canvas #chartCanvas></canvas>`,
   styleUrl: './chart.scss'
 })
-export class Chart implements AfterViewInit {
+export class Chart implements AfterViewInit, OnChanges {
   @ViewChild('chartCanvas') chartRef!: ElementRef<HTMLCanvasElement>;
   @Input() tasksDone: number = 0;
   @Input() tasksLeft: number = 0;
@@ -16,6 +16,16 @@ export class Chart implements AfterViewInit {
   chart!: ChartJS;
 
   ngAfterViewInit() {
+    this.createChart();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.chart) {
+      this.updateChart();
+    }
+  }
+
+  createChart() {
     const greyBackgroundPlugin: Plugin<'bar'> = {
       id: 'greyBackground',
       beforeDraw: (chart) => {
@@ -46,17 +56,23 @@ export class Chart implements AfterViewInit {
         },
         maintainAspectRatio: false,
         scales: {
-          x: {
+          ['x']: {
             display: true,
             min: 0,
             max: Math.max(this.tasksDone + this.tasksLeft, this.tasksNeeded)
           },
-          y: {
+          ['y']: {
             display: true
           }
         }
       }, 
       plugins: [greyBackgroundPlugin]
     });
+  }
+
+  updateChart() {
+    this.chart.data.datasets[0].data = [this.tasksDone];
+    this.chart.options.scales!['x']!.max = Math.max(this.tasksDone + this.tasksLeft, this.tasksNeeded);
+    this.chart.update();
   }
 }

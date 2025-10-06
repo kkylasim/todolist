@@ -23,6 +23,7 @@ export class ProgressCard {
   tasksNeeded = 1;
   level = 1;
   readonly dialog = inject(MatDialog);
+  private isLevelUpDialogOpen = false;
 
   constructor(
     private taskService: TaskService,
@@ -41,6 +42,8 @@ export class ProgressCard {
   }
 
   levelUp() {
+    if (this.isLevelUpDialogOpen) return;
+    this.isLevelUpDialogOpen = true;
     this.progressService.setHasLeveledUp(true);
     // Default rewards
     const defaultRewards = [
@@ -59,12 +62,13 @@ export class ProgressCard {
     });
     dialogRef.afterClosed().subscribe(() => {
       this.progressService.incrementLevel();
+      this.isLevelUpDialogOpen = false;
       // No need to reset hasLeveledUp here, handled in incrementLevel
     });
   }
 
   checkLevelUp(hasLeveledUp?: boolean) {
-    if (this.tasksLeft === 0 && !hasLeveledUp) {
+    if (this.tasksLeft === 0 && !hasLeveledUp && !this.isLevelUpDialogOpen) {
       this.levelUp();
     }
   }
