@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import {MatCardModule} from '@angular/material/card';
 import { ExpandList } from '../../../../common-components/expand-list/expand-list';
 import { Button } from '../../../../common-components/button/button';
@@ -28,15 +28,18 @@ export class TaskCard {
   inProgress: any[] = [];
   completed: any[] = [];
 
-  constructor(private taskService: TaskService) {
-    this.taskService.todaysTodo$.subscribe(todo => {
+  constructor(private taskService: TaskService, private cdr: ChangeDetectorRef) {
+    this.taskService.todo$.subscribe(todo => {
       this.todo = todo;
+      this.cdr.markForCheck();
     });
-    this.taskService.todaysInProgress$.subscribe(progress => {
+    this.taskService.inProgress$.subscribe(progress => {
       this.inProgress = progress;
+      this.cdr.markForCheck();
     });
-    this.taskService.todaysCompleted$.subscribe(completed => {
+    this.taskService.completed$.subscribe(completed => {
       this.completed = completed;
+      this.cdr.markForCheck();
     });
   }
 
@@ -45,12 +48,7 @@ export class TaskCard {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       const movedTask = event.previousContainer.data[event.previousIndex];
-      // console.log('Drag drop:', {
-      //   id: movedTask.id,
-      //   prevStatus: movedTask.status,
-      //   prevDueDate: movedTask.duedate,
-      //   targetList: event.container.id
-      // });
+      const prevStatus = movedTask.status; // Capture previous status before changing
       if (event.container.id === 'todoList') {
         movedTask.status = 'Todo';
       } else if (event.container.id === 'inProgressList') {
@@ -58,8 +56,8 @@ export class TaskCard {
       } else if (event.container.id === 'doneList') {
         movedTask.status = 'Complete';
       }
-      // console.log('Updating task:', movedTask);
-      this.taskService.updateTask(movedTask.id, movedTask);
+      this.taskService.updateTask(movedTask.id, movedTask, prevStatus); // Pass prevStatus
     }
+    this.cdr.markForCheck(); // Ensure Angular picks up changes after drag-and-drop
   }
 }

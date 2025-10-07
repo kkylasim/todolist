@@ -69,15 +69,14 @@ export class ExpandList implements OnInit, OnChanges {
         const dueDateTime = this.getDueDateTime(task);
         if (dueDateTime) {
           if (dueDateTime < now) {
-            if (task.status !== 'Overdue') {
-              task.status = 'Overdue';
-              this.taskService.updateTask(task.id, { ...task, status: 'Overdue' });
+            if (!task.isOverdue) {
+              task.isOverdue = true;
+              this.taskService.updateTask(task.id, { ...task, isOverdue: true });
             }
           } else {
-            // If the task was previously overdue but now has a future or today due date, reset to Todo
-            if (task.status === 'Overdue') {
-              task.status = 'Todo';
-              this.taskService.updateTask(task.id, { ...task, status: 'Todo' });
+            if (task.isOverdue) {
+              task.isOverdue = false;
+              this.taskService.updateTask(task.id, { ...task, isOverdue: false });
             }
           }
         }
@@ -90,12 +89,6 @@ export class ExpandList implements OnInit, OnChanges {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       const movedTask = event.previousContainer.data[event.previousIndex];
-      console.log('ExpandList drop:', {
-        id: movedTask.id,
-        prevStatus: movedTask.status,
-        prevDueDate: movedTask.duedate,
-        targetList: event.container.id
-      });
       if (event.container.id === 'todoList') {
         movedTask.status = 'Todo';
       } else if (event.container.id === 'inProgressList') {
@@ -103,7 +96,6 @@ export class ExpandList implements OnInit, OnChanges {
       } else if (event.container.id === 'doneList') {
         movedTask.status = 'Complete';
       }
-      console.log('ExpandList updating task:', movedTask);
       this.taskService.updateTask(movedTask.id, movedTask);
     }
   }
@@ -148,6 +140,9 @@ export class ExpandList implements OnInit, OnChanges {
   }
 
   getStatusClass(panel: any): string {
+    if (panel.isOverdue) {
+      return 'status-overdue'; // grey or special overdue style
+    }
     switch (panel.status) {
       case 'Complete':
         return 'status-complete'; // green
@@ -155,8 +150,6 @@ export class ExpandList implements OnInit, OnChanges {
         return 'status-progress'; // orange
       case 'Todo':
         return 'status-todo'; // red
-      case 'Overdue':
-        return 'status-overdue'; // grey
       default:
         return '';
     }

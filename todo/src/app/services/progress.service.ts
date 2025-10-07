@@ -4,15 +4,24 @@ import { BehaviorSubject } from 'rxjs';
 export interface ProgressState {
   level: number;
   tasksDone: number;
-  tasksNeeded: number;
+  tasksNeeded: number | null;
   hasLeveledUp?: boolean;
+  milestoneHistory?: number[]; // Array of milestones for previous levels
+  completedThisLevel?: number; // Tasks completed toward current level
 }
 
 const PROGRESS_KEY = 'progress';
 
 @Injectable({ providedIn: 'root' })
 export class ProgressService {
-  private defaultState: ProgressState = { level: 1, tasksDone: 0, tasksNeeded: 2, hasLeveledUp: false };
+  private defaultState: ProgressState = {
+    level: 1,
+    tasksDone: 0,
+    tasksNeeded: null,
+    hasLeveledUp: false,
+    milestoneHistory: [],
+    completedThisLevel: 0
+  };
   private stateSource = new BehaviorSubject<ProgressState>(this.loadState());
   state$ = this.stateSource.asObservable();
 
@@ -37,16 +46,18 @@ export class ProgressService {
     this.saveState(newState);
   }
 
-  incrementLevel() {
+  levelUp(level: number) {
     const state = this.getState();
-    const newState = {
+    const milestoneHistory = [...(state.milestoneHistory || []), state.tasksNeeded || 0];
+    this.setState({
       ...state,
-      level: state.level + 1,
+      level,
       tasksDone: 0,
-      tasksNeeded: state.tasksNeeded + 2,
-      hasLeveledUp: false
-    };
-    this.setState(newState);
+      hasLeveledUp: false,
+      milestoneHistory,
+      completedThisLevel: 0
+      // tasksNeeded will be set by user via dialog
+    });
   }
 
   setTasksDone(tasksDone: number) {
@@ -57,5 +68,41 @@ export class ProgressService {
   setHasLeveledUp(flag: boolean) {
     const state = this.getState();
     this.setState({ ...state, hasLeveledUp: flag });
+  }
+
+  setTasksNeeded(tasksNeeded: number | null) {
+    const state = this.getState();
+    this.setState({ ...state, tasksNeeded });
+  }
+
+  resetTasksNeeded() {
+    this.setTasksNeeded(null);
+  }
+
+  incrementCompletedThisLevel() {
+    const state = this.getState();
+    this.setState({ ...state, completedThisLevel: (state.completedThisLevel || 0) + 1 });
+    console.log(state.completedThisLevel);
+  }
+
+  decrementCompletedThisLevel() {
+    const state = this.getState();
+    this.setState({ ...state, completedThisLevel: Math.max((state.completedThisLevel || 0) - 1, 0) });
+  }
+
+  getCurrentMilestone(): number {
+    const state = this.getState();
+    return state.tasksNeeded || 0;
+  }
+
+  getCurrentProgress(): number {
+    const state = this.getState();
+    // console.log(state.completedThisLevel)
+    return state.completedThisLevel || 0;
+  }
+
+  getTotalMilestones(): number {
+    const state = this.getState();
+    return (state.milestoneHistory || []).reduce((sum, milestone) => sum + milestone, 0);
   }
 }

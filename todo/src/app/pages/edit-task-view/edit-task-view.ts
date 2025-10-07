@@ -90,4 +90,8 @@ export class EditTaskView implements OnInit {
       this.task.recurring = null;
     }
   }
+
+  cancelTask() {
+    this.router.navigate(['/listView']);
+  }
 }

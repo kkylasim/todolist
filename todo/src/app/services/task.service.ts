@@ -5,6 +5,7 @@ import { StorageService } from './storage.service';
 import { ProgressService } from '../services/progress.service';
 
 const TASKS_KEY = 'tasks';
+const COMPLETED_TASK_IDS_KEY = 'completedTaskIds';
 
 @Injectable({ providedIn: 'root' })
 export class TaskService {
@@ -115,24 +116,15 @@ export class TaskService {
   }
 
   // Observable for today's tasks (compare using normalized local date)
-  todaysTasks$ = this.tasks$.pipe(
-    map(tasks => {
-      const todayStr = this.getToday();
-      return tasks.filter(t => this.normalizeDate(t.duedate) === todayStr);
-    })
-  );
-
-  todaysTodo$ = this.todaysTasks$.pipe(
+  todo$ = this.tasks$.pipe(
     map(tasks => tasks.filter(t => t.status === 'Todo'))
-  );
-
-  todaysInProgress$ = this.todaysTasks$.pipe(
+  )
+  inProgress$ = this.tasks$.pipe(
     map(tasks => tasks.filter(t => t.status === 'Progress'))
-  );
-
-  todaysCompleted$ = this.todaysTasks$.pipe(
+  )
+  completed$ = this.tasks$.pipe(
     map(tasks => tasks.filter(t => t.status === 'Complete'))
-  );
+  )
 
   //search function
   private searchTermSubject = new BehaviorSubject<string>('');
@@ -162,15 +154,72 @@ export class TaskService {
     return this.tasks.find(t => t.id === id);
   }
 
+  // Get the persistent set of completed task IDs
+  private getCompletedTaskIds(): number[] {
+    const ids = localStorage.getItem(COMPLETED_TASK_IDS_KEY);
+    return ids ? JSON.parse(ids) : [];
+  }
+
+  // Add a completed task ID to persistent storage
+  private addCompletedTaskId(id: number) {
+    const ids = this.getCompletedTaskIds();
+    if (!ids.includes(id)) {
+      ids.push(id);
+      localStorage.setItem(COMPLETED_TASK_IDS_KEY, JSON.stringify(ids));
+    }
+  }
+
+  // Remove a completed task ID from persistent storage
+  private removeCompletedTaskId(id: number) {
+    const ids = this.getCompletedTaskIds();
+    const idx = ids.indexOf(id);
+    if (idx !== -1) {
+      ids.splice(idx, 1);
+      localStorage.setItem(COMPLETED_TASK_IDS_KEY, JSON.stringify(ids));
+    }
+  }
+
+  // Public: get total number of unique completed tasks
+  getTotalCompletedCount(): number {
+    return this.getCompletedTaskIds().length;
+  }
+
   // Update
-  updateTask(id: number, updatedTask: Task) {
+  updateTask(id: number, updatedTask: Task, prevStatus?: string) {
     const idx = this.tasks.findIndex(t => t.id === id);
     if (idx !== -1) {
       this.tasks[idx] = { ...updatedTask };
       this.storage.setItem(TASKS_KEY, this.tasks);
       this.tasksSource.next([...this.tasks]);
       // Update progress after any task status change
-      const completedCount = this.tasks.filter(t => t.status === 'Complete' && t.duedate === this.getToday()).length;
+      const completedCount = this.tasks.filter(t => t.status === 'Complete').length;
+
+      // Progress milestone logic
+      if (typeof window !== 'undefined' && (window as any).ng && (window as any).ng.getInjector) {
+        try {
+          const injector = (window as any).ng.getInjector(document.querySelector('app-root'));
+          const progressService = injector.get(ProgressService);
+          // If task is newly completed (was not complete before)
+          if (updatedTask.status === 'Complete' && prevStatus !== 'Complete') {
+            progressService.incrementCompletedThisLevel();
+          }
+          // If task is moved out of complete (was complete before, now not)
+          if (prevStatus === 'Complete' && updatedTask.status !== 'Complete') {
+            progressService.decrementCompletedThisLevel();
+          }
+          progressService.setTasksDone(completedCount);
+        } catch (e) {}
+      }
+
+      console.log(prevStatus, updatedTask.status, typeof(prevStatus));
+      if (updatedTask.status === 'Complete') {
+        this.addCompletedTaskId(id);
+      } else if ((prevStatus as string) === 'Complete' && (updatedTask.status as string) !== 'Complete') {
+        this.removeCompletedTaskId(id);
+      }
+
+      console.log('Task updated:', updatedTask);
+      
       if (typeof window !== 'undefined' && (window as any).ng && (window as any).ng.getInjector) {
         try {
           const injector = (window as any).ng.getInjector(document.querySelector('app-root'));
@@ -187,5 +236,14 @@ export class TaskService {
     this.tasks = this.tasks.filter(t => t.id !== id);
     this.storage.setItem(TASKS_KEY, this.tasks);
     this.tasksSource.next([...this.tasks]);
+    // Update progress after deletion
+    const completedCount = this.tasks.filter(t => t.status === 'Complete').length;
+    if (typeof window !== 'undefined' && (window as any).ng && (window as any).ng.getInjector) {
+      try {
+        const injector = (window as any).ng.getInjector(document.querySelector('app-root'));
+        const progressService = injector.get(ProgressService);
+        progressService.setTasksDone(completedCount);
+      } catch (e) {}
+    }
   }
 }

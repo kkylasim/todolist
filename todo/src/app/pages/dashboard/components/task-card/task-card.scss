@@ -65,6 +65,11 @@ mat-card-content {
     display: block;
 }
 
+.scrollable-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
 .mat-mdc-card-header {
     padding-right: 16px;
     padding-left: 0;

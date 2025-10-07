@@ -34,21 +34,30 @@ export class ListView {
 
   filterTasksByStatus(tasks: any[]): any[] {
     if (this.selectedStatus.length === 0) return tasks;
+    const statusMap: { [key: string]: string } = {
+      'To do': 'Todo',
+      'In progress': 'Progress',
+      'Completed': 'Complete'
+    };
     return tasks.filter(task => {
-      const statusMap: { [key: string]: string } = {
-        'To do': 'Todo',
-        'In progress': 'Progress',
-        'Completed': 'Complete',
-        'Overdue': 'Overdue'
-      };
       return this.selectedStatus.includes(Object.keys(statusMap).find(key => statusMap[key] === task.status) || '');
     });
+  }
+
+  filterTasksByOverdue(tasks: any[]): any[] {
+    // Optionally filter overdue tasks if you want a toggle/filter for overdue
+    // Example: if you add a UI toggle for overdue, filter here
+    // For now, just return all tasks
+    return tasks;
   }
 
   sortTasksByDueDate(tasks: any[]): any[] {
     return tasks.slice().sort((a, b) => {
       const aDate = new Date(`${a.duedate}T${a.duetime || '00:00'}`);
       const bDate = new Date(`${b.duedate}T${b.duetime || '00:00'}`);
+      // Prioritize overdue tasks if desired
+      if (a.isOverdue && !b.isOverdue) return -1;
+      if (!a.isOverdue && b.isOverdue) return 1;
       return aDate.getTime() - bDate.getTime();
     });
   }
@@ -56,6 +65,7 @@ export class ListView {
   filterTasks(tasks: any[]): any[] {
     let filtered = this.filterTasksByTags(tasks);
     filtered = this.filterTasksByStatus(filtered);
+    filtered = this.filterTasksByOverdue(filtered); // Optionally filter overdue
     if (this.sortBy === 'dueDate') {
       filtered = this.sortTasksByDueDate(filtered);
     }

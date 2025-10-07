@@ -9,7 +9,7 @@ import { Chart as ChartJS, Plugin } from 'chart.js/auto';
 })
 export class Chart implements AfterViewInit, OnChanges {
   @ViewChild('chartCanvas') chartRef!: ElementRef<HTMLCanvasElement>;
-  @Input() tasksDone: number = 0;
+  @Input() completedThisLevel: number = 0; // Should be completedThisLevel
   @Input() tasksLeft: number = 0;
   @Input() tasksNeeded: number = 10;
 
@@ -45,7 +45,7 @@ export class Chart implements AfterViewInit, OnChanges {
           backgroundColor: ['#E19DE3'],
           barPercentage: 0.8,
           categoryPercentage: 1,
-          data: [this.tasksDone]
+          data: [this.completedThisLevel] // This should be completedThisLevel
         }]
       },
       options: {
@@ -59,7 +59,7 @@ export class Chart implements AfterViewInit, OnChanges {
           ['x']: {
             display: true,
             min: 0,
-            max: Math.max(this.tasksDone + this.tasksLeft, this.tasksNeeded)
+            max: Math.max(this.tasksNeeded, this.completedThisLevel + this.tasksLeft)
           },
           ['y']: {
             display: true
@@ -71,8 +71,8 @@ export class Chart implements AfterViewInit, OnChanges {
   }
 
   updateChart() {
-    this.chart.data.datasets[0].data = [this.tasksDone];
-    this.chart.options.scales!['x']!.max = Math.max(this.tasksDone + this.tasksLeft, this.tasksNeeded);
+    this.chart.data.datasets[0].data = [this.completedThisLevel]; 
+    this.chart.options.scales!['x']!.max = Math.max(this.tasksNeeded, this.completedThisLevel + this.tasksLeft);
     this.chart.update();
   }
 }

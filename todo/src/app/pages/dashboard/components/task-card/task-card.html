@@ -3,7 +3,7 @@
       <div mat-card-avatar class="example-header-image"></div>
       <div class="title">
         <mat-card-title>
-          <h1>Today's tasks</h1>
+          <h1>My tasks</h1>
         </mat-card-title>
         <mat-card-actions>
           <app-button icon="add" label="New Task" [routerLink]="'/taskView'"></app-button>
@@ -18,13 +18,13 @@
             cdkDropList
             #todoList="cdkDropList"
             id="todoList"
-            [cdkDropListData]="todo$ | async"
+            [cdkDropListData]="todo"
             [cdkDropListConnectedTo]="[inProgressList, doneList]"
-            class="example-list"
+            class="example-list scrollable-list"
             (cdkDropListDropped)="drop($event)"
           >
-            <app-expand-list [panels]="todo$ | async"></app-expand-list>
-            <div *ngIf="(todo$ | async)?.length === 0" class="empty-placeholder">No tasks</div>
+            <app-expand-list [panels]="todo"></app-expand-list>
+            <div *ngIf="(todo)?.length === 0" class="empty-placeholder">No tasks</div>
           </div>
         </div>
         <div class="item">
@@ -33,13 +33,13 @@
             cdkDropList
             #inProgressList="cdkDropList"
             id="inProgressList"
-            [cdkDropListData]="inProgress$ | async"
+            [cdkDropListData]="inProgress"
             [cdkDropListConnectedTo]="[todoList, doneList]"
-            class="example-list"
+            class="example-list scrollable-list"
             (cdkDropListDropped)="drop($event)"
           >
-            <app-expand-list [panels]="inProgress$ | async"></app-expand-list>
-            <div *ngIf="(inProgress$ | async)?.length === 0" class="empty-placeholder">No tasks</div>
+            <app-expand-list [panels]="inProgress"></app-expand-list>
+            <div *ngIf="(inProgress)?.length === 0" class="empty-placeholder">No tasks</div>
           </div>
         </div>
         <div class="item">
@@ -48,14 +48,14 @@
             cdkDropList
             #doneList="cdkDropList"
             id="doneList"
-            [cdkDropListData]="completed$ | async"
+            [cdkDropListData]="completed"
             [cdkDropListConnectedTo]="[todoList, inProgressList]"
-            class="example-list"
+            class="example-list scrollable-list"
             style="min-height: 50px;"
             (cdkDropListDropped)="drop($event)"
           >
-            <app-expand-list [panels]="completed$ | async"></app-expand-list>
-            <div *ngIf="(completed$ | async)?.length === 0" class="empty-placeholder">No tasks</div>
+            <app-expand-list [panels]="completed"></app-expand-list>
+            <div *ngIf="(completed)?.length === 0" class="empty-placeholder">No tasks</div>
           </div>
         </div>
       </div>

@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>Goal setting</h2>
+<mat-dialog-content class="mat-typography">
+    <h3>How many tasks would you like to complete before your next level up?</h3>
+    <mat-form-field>
+        <mat-label>Number</mat-label>
+        <input matInput type="number" [(ngModel)]="tasksNeededInput" placeholder="2" min="2" required/>
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button matButton [mat-dialog-close]="tasksNeededInput" cdkFocusInitial [disabled]="!tasksNeededInput || tasksNeededInput < 2">Save</button>
+</mat-dialog-actions>
