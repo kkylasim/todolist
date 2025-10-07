@@ -140,9 +140,6 @@ export class ExpandList implements OnInit, OnChanges {
   }
 
   getStatusClass(panel: any): string {
-    if (panel.isOverdue) {
-      return 'status-overdue'; // grey or special overdue style
-    }
     switch (panel.status) {
       case 'Complete':
         return 'status-complete'; // green

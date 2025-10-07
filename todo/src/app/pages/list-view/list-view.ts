@@ -34,13 +34,22 @@ export class ListView {
 
   filterTasksByStatus(tasks: any[]): any[] {
     if (this.selectedStatus.length === 0) return tasks;
+    // Map UI status values to model status values
     const statusMap: { [key: string]: string } = {
       'To do': 'Todo',
       'In progress': 'Progress',
       'Completed': 'Complete'
     };
+    // If 'Overdue' is selected, filter by isOverdue flag
+    const wantsOverdue = this.selectedStatus.includes('Overdue');
+    // Get selected status values for model
+    const selectedModelStatuses = this.selectedStatus
+      .filter(s => s !== 'Overdue')
+      .map(s => statusMap[s]);
     return tasks.filter(task => {
-      return this.selectedStatus.includes(Object.keys(statusMap).find(key => statusMap[key] === task.status) || '');
+      const statusMatch = selectedModelStatuses.length === 0 || selectedModelStatuses.includes(task.status);
+      const overdueMatch = wantsOverdue ? task.isOverdue : true;
+      return statusMatch && overdueMatch;
     });
   }
 
