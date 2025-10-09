@@ -92,6 +92,8 @@ export class ProgressCard {
       disableClose: true
     });
     dialogRef.afterClosed().subscribe(() => {
+      // After level up, clear completed tasks
+      this.taskService.clearCompletedTasks();
       // After level up, open input task dialog for user to set tasksNeeded
       this.progressService.levelUp(this.level + 1);
       this.isLevelUpDialogOpen = false;

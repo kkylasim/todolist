@@ -18,19 +18,10 @@ export class TagService {
       this.tags = storedTags;
     } else {
       this.tags = [
-        { id: 1, name: 'Angular', color: '#DD0031' },
-        { id: 2, name: 'Writing', color: '#FFD700' },
-        { id: 3, name: 'Meeting', color: '#2196F3' },
-        { id: 4, name: 'Team', color: '#4CAF50' },
-        { id: 5, name: 'Code', color: '#9C27B0' },
-        { id: 6, name: 'Review', color: '#FF5722' },
-        { id: 7, name: 'Blog', color: '#FF9800' },
-        { id: 8, name: 'Design', color: '#E91E63' },
-        { id: 9, name: 'UI', color: '#00BCD4' },
-        { id: 10, name: 'Presentation', color: '#8BC34A' },
-        { id: 11, name: 'Client', color: '#795548' },
-        { id: 12, name: 'Deployment', color: '#607D8B' },
-        { id: 13, name: 'Release', color: '#F44336' }
+        { id: 1, name: 'Personal', color: '#DD0031' },
+        { id: 2, name: 'Work', color: '#4CAF50' },
+        { id: 11, name: 'Health', color: '#795548' },
+        { id: 12, name: 'Family', color: '#607D8B' }
       ];
       this.storage.setItem(TAGS_KEY, this.tags);
     }

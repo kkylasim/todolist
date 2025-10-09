@@ -45,3 +45,4 @@
     </div>
   </div>
 <app-expand-list [panels]="tasks" [showTagsInHeader]="true"></app-expand-list>
+<div *ngIf="(tasks)?.length === 0" class="empty-placeholder" style="text-align: center; font-style: oblique; padding-top: 200px; font-weight: bolder;">No tasks. Add your first task today!</div>
