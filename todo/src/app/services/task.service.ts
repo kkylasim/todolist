@@ -20,76 +20,76 @@ export class TaskService {
       this.tasks = storedTasks;
     } else {
       this.tasks = [
-        {
-          id: 1,
-          status: 'Todo',
-          title: 'Write Angular Tutorial',
-          description: 'Create a tutorial for Angular beginners',
-          duedate: '2025-10-05',
-          duetime: '10:00',
-          recurring: null,
-          tags: [1, 2]
-        },
-        {
-          id: 2,
-          status: 'Progress',
-          title: 'Team Meeting',
-          description: 'Discuss project milestones and blockers',
-          duedate: '2025-10-02',
-          duetime: '14:00',
-          recurring: { frequency: 1, type: 'Weekly' },
-          tags: [3, 4]
-        },
-        {
-          id: 3,
-          status: 'Complete',
-          title: 'Code Review',
-          description: 'Review pull requests for the latest sprint',
-          duedate: '2025-09-30',
-          duetime: '16:30',
-          recurring: null,
-          tags: [5, 6]
-        },
-        {
-          id: 4,
-          status: 'Todo',
-          title: 'Write Blog Post',
-          description: 'Post about new Angular features',
-          duedate: '2025-10-06',
-          duetime: '11:00',
-          recurring: { frequency: 2, type: 'Monthly' },
-          tags: [7, 1]
-        },
-        {
-          id: 5,
-          status: 'Progress',
-          title: 'Design Mockups',
-          description: 'Create UI mockups for new feature',
-          duedate: '2025-10-06',
-          duetime: '09:00',
-          recurring: null,
-          tags: [8, 9]
-        },
-        {
-          id: 6,
-          status: 'Todo',
-          title: 'Prepare Presentation',
-          description: 'Prepare slides for client meeting',
-          duedate: '2025-10-06',
-          duetime: '13:00',
-          recurring: null,
-          tags: [10, 11]
-        },
-        {
-          id: 7,
-          status: 'Complete',
-          title: 'Deploy Update',
-          description: 'Deploy the latest release to production',
-          duedate: '2025-10-06',
-          duetime: '17:00',
-          recurring: { frequency: 1, type: 'Weekly' },
-          tags: [12, 13]
-        }
+        // {
+        //   id: 1,
+        //   status: 'Todo',
+        //   title: 'Write Angular Tutorial',
+        //   description: 'Create a tutorial for Angular beginners',
+        //   duedate: '2025-10-05',
+        //   duetime: '10:00',
+        //   recurring: null,
+        //   tags: [1, 2]
+        // },
+        // {
+        //   id: 2,
+        //   status: 'Progress',
+        //   title: 'Team Meeting',
+        //   description: 'Discuss project milestones and blockers',
+        //   duedate: '2025-10-02',
+        //   duetime: '14:00',
+        //   recurring: { frequency: 1, type: 'Weekly' },
+        //   tags: [3, 4]
+        // },
+        // {
+        //   id: 3,
+        //   status: 'Complete',
+        //   title: 'Code Review',
+        //   description: 'Review pull requests for the latest sprint',
+        //   duedate: '2025-09-30',
+        //   duetime: '16:30',
+        //   recurring: null,
+        //   tags: [5, 6]
+        // },
+        // {
+        //   id: 4,
+        //   status: 'Todo',
+        //   title: 'Write Blog Post',
+        //   description: 'Post about new Angular features',
+        //   duedate: '2025-10-06',
+        //   duetime: '11:00',
+        //   recurring: { frequency: 2, type: 'Monthly' },
+        //   tags: [7, 1]
+        // },
+        // {
+        //   id: 5,
+        //   status: 'Progress',
+        //   title: 'Design Mockups',
+        //   description: 'Create UI mockups for new feature',
+        //   duedate: '2025-10-06',
+        //   duetime: '09:00',
+        //   recurring: null,
+        //   tags: [8, 9]
+        // },
+        // {
+        //   id: 6,
+        //   status: 'Todo',
+        //   title: 'Prepare Presentation',
+        //   description: 'Prepare slides for client meeting',
+        //   duedate: '2025-10-06',
+        //   duetime: '13:00',
+        //   recurring: null,
+        //   tags: [10, 11]
+        // },
+        // {
+        //   id: 7,
+        //   status: 'Complete',
+        //   title: 'Deploy Update',
+        //   description: 'Deploy the latest release to production',
+        //   duedate: '2025-10-06',
+        //   duetime: '17:00',
+        //   recurring: { frequency: 1, type: 'Weekly' },
+        //   tags: [12, 13]
+        // }
       ];
       this.storage.setItem(TASKS_KEY, this.tasks);
     }

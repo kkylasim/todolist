@@ -14,6 +14,7 @@
         <input matInput [(ngModel)]="newReward" (keyup.enter)="addReward()">
     </mat-form-field>
     <app-button icon="add" label="Add Reward" (click)="addReward()"></app-button>
+    <p style="margin-top: 0%; font-style: italic;">If no custom rewards are created, default rewards will be used.</p>
     
 </mat-dialog-content>
 <mat-dialog-actions align="end">

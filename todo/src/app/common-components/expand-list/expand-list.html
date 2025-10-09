@@ -32,7 +32,7 @@
       </mat-chip-set>
       <p style="font-size: small;">Due: {{ getDueDateTime(panel) | date:'short' }} <br>
         Description: {{ panel.description }}<br>
-        Recurring: {{ panel.recurring? panel.recurring.frequency + ' times a ' + panel.recurring.type : 'None' }}</p>
+        Recurring: {{ panel.recurring? 'Repeat once a ' + panel.recurring.type + ' for ' + panel.recurring.frequency + ' ' + panel.recurring.type + 's' : 'None' }}</p>
     </mat-expansion-panel>
   </div>
 </mat-accordion>
