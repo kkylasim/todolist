@@ -55,6 +55,9 @@ export class EditTaskView implements OnInit {
   }
 
   saveTask() {
+    if (!this.task.title || this.task.title.trim().length === 0) {
+      return;
+    }
     if (this.task.id) {
       // Ensure duedate is always a string in YYYY-MM-DD format (local)
       if (this.task.duedate) {

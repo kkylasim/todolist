@@ -5,7 +5,10 @@
     <div class="form-row">
       <h3>Task Title</h3>
       <mat-form-field>
-        <input matInput [(ngModel)]="task.title">
+        <input matInput [(ngModel)]="task.title" required [ngModelOptions]="{updateOn: 'blur'}" #titleInput="ngModel" minlength="1">
+        <mat-error *ngIf="titleInput.invalid && (titleInput.dirty || titleInput.touched)">
+          Task title is required.
+        </mat-error>
       </mat-form-field>
     </div>
     <div class="form-row">

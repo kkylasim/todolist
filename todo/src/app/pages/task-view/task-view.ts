@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import {MatSelectModule} from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -56,9 +56,11 @@ export class TaskView {
   }
 
   constructor(private taskService: TaskService,
-    private router: Router, private route: ActivatedRoute, private tagService: TagService) {
+    private router: Router, private route: ActivatedRoute, private tagService: TagService,
+    private cd: ChangeDetectorRef) {
       this.tagService.tags$.subscribe(tags => {
         this.tags = tags;
+        this.cd.markForCheck(); // Ensure UI refreshes when tags change
       });
     }
 
