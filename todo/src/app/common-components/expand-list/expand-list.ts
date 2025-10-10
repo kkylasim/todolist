@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, signal, Input, inject, OnInit, OnChanges, SimpleChanges} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, signal, Input, inject, OnInit, OnChanges, SimpleChanges} from '@angular/core';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
@@ -45,9 +45,10 @@ export class ExpandList implements OnInit, OnChanges {
   @Input() panels: any[] | null | undefined = [];
   @Input() showTagsInHeader: boolean = false;
 
-  constructor(private taskService: TaskService, private tagService: TagService, private router: Router, private dialog: MatDialog) {
+  constructor(private taskService: TaskService, private tagService: TagService, private router: Router, private dialog: MatDialog, cdr: ChangeDetectorRef) {
     this.tagService.tags$.subscribe(tags => {
       this.tags = tags;
+      cdr.markForCheck();
     });
   }
 
