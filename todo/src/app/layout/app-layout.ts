@@ -39,6 +39,7 @@ import { MatButtonModule } from '@angular/material/button';
         fixedInViewport="true"
         mode="side"
         opened="{{ isExpanded }}"
+        disableClose="true"
       >
         <app-side-nav
           (toggleMenu)="toggleMenu()"
