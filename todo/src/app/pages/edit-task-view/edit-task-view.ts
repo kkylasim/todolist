@@ -30,6 +30,7 @@ export class EditTaskView implements OnInit {
   task: Partial<Task> = {};
   tags: Tag[] = [];
   isRecurring = false;
+  private prevStatus: string | undefined; // Store previous status
 
   constructor(
     private taskService: TaskService,
@@ -43,6 +44,7 @@ export class EditTaskView implements OnInit {
     const foundTask = this.taskService.getTaskById(id);
     if (foundTask) {
       this.task = { ...foundTask };
+      this.prevStatus = foundTask.status; // Save previous status
       this.isRecurring = !!this.task.recurring;
       // Ensure tags is number[]
       if (!Array.isArray(this.task.tags)) {
@@ -78,7 +80,7 @@ export class EditTaskView implements OnInit {
       }
       // Ensure tags is number[]
       this.task.tags = this.task.tags?.map(tagId => Number(tagId)) || [];
-      this.taskService.updateTask(this.task.id as number, this.task as Task);
+      this.taskService.updateTask(this.task.id as number, this.task as Task, this.prevStatus); 
       this.router.navigate(['/list']);
     }
   }
