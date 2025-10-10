@@ -39,8 +39,6 @@ export class SideNav {
   public routeLinks = [
     { link: "/dashboard", name: "Dashboard", icon: "dashboard" },
     { link: "/listView", name: "View All Tasks", icon: "account_balance" },
-    // { link: "/calendarView", name: "CalendarView", icon: "account_balance" },
-    { link: "/taskView", name: "Add Task", icon: "account_balance" },
-    // { link: "/editTaskView/:id", name: "Edit Task", icon: "account_balance" }
+    { link: "/taskView", name: "Add Task", icon: "account_balance" }
   ];
 }

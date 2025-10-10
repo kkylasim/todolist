@@ -25,25 +25,6 @@ export class TaskService {
     this.tasksSource.next([...this.tasks]);
   }
 
-  // Utility: get today's date in YYYY-MM-DD format (local timezone)
-  private getToday(): string {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-
-  // Utility: normalize date string to local YYYY-MM-DD
-  private normalizeDate(date: string | Date): string {
-    if (!date) return '';
-    const d = typeof date === 'string' ? new Date(date) : date;
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-
   // Observable for today's tasks (compare using normalized local date)
   todo$ = this.tasks$.pipe(
     map(tasks => tasks.filter(t => t.status === 'Todo'))
